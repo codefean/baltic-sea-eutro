@@ -48,7 +48,6 @@ const RouteMap = () => {
     setPitch(DEFAULT_PITCH);
   };
 
-
   const cinematicFlyRoute = () => {
     const map = mapRef.current;
     if (!map) return;
@@ -67,7 +66,7 @@ const RouteMap = () => {
     ];
 
     let frame = 0;
-    const FRAME_TIME = 40; 
+    const FRAME_TIME = 40;
 
     const animate = () => {
       if (frame >= keyPoints.length - 1) return;
@@ -97,7 +96,6 @@ const RouteMap = () => {
     animate();
   };
 
-
   useEffect(() => {
     const handleKeydown = (e) => {
       if (e.key.toLowerCase() === "r") resetZoom();
@@ -105,7 +103,6 @@ const RouteMap = () => {
     window.addEventListener("keydown", handleKeydown);
     return () => window.removeEventListener("keydown", handleKeydown);
   }, []);
-
 
   useEffect(() => {
     const map = mapRef.current;
@@ -120,7 +117,6 @@ const RouteMap = () => {
       map.off("pitchend", sync);
     };
   }, []);
-
 
   useEffect(() => {
     const initMap = async () => {
@@ -142,7 +138,6 @@ const RouteMap = () => {
       await new Promise((resolve) => mapRef.current.on("load", resolve));
       updateProgress("Mapbox map loaded", step++, totalSteps);
 
-
       if (!mapRef.current.getSource("mapbox-dem")) {
         mapRef.current.addSource("mapbox-dem", {
           type: "raster-dem",
@@ -152,7 +147,6 @@ const RouteMap = () => {
         });
         mapRef.current.setTerrain({ source: "mapbox-dem", exaggeration: 1.0 });
       }
-
 
       mapRef.current.on("mousemove", (e) => {
         const { lng, lat } = e.lngLat;
@@ -170,13 +164,12 @@ const RouteMap = () => {
         setCursorInfo({ lat: null, lng: null, elevM: null })
       );
 
-
       updateProgress("Loading bike route...", step++, totalSteps);
 
       try {
-        const routeData = await fetch("/route.geojson").then((r) =>
-          r.json()
-        );
+        // ⭐ UPDATED FOR GITHUB PAGES ⭐
+        const routeData = await fetch(`${process.env.PUBLIC_URL}/route.geojson`)
+          .then((r) => r.json());
 
         mapRef.current.addSource("bike-route", {
           type: "geojson",
@@ -241,8 +234,6 @@ const RouteMap = () => {
           zIndex: 1,
         }}
       />
-
-      
     </div>
   );
 };

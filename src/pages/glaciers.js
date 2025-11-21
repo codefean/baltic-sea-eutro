@@ -14,21 +14,19 @@ export const glacierTileset2 = {
   sourceId: "mapstogpx20251105_20-abjb2d",
 };
 
+// polygon glaciers
 export const FILL_LAYER_ID_1 = "glacier-fill-scandi";
-export const FILL_LAYER_ID_2 = "glacier-fill-svalbard";
+
+// GPX route stored as vector tiles
+export const LINE_LAYER_ID_2 = "research-route-line";
+
+// highlight layers
 const HIGHLIGHT_LAYER_ID = "glacier-hover-highlight-scandi";
-const HIGHLIGHT_LAYER_ID_2 = "glacier-hover-highlight-svalbard";
+const HIGHLIGHT_LAYER_ID_2 = "research-route-hover";
 
 const getGlacierLabel = (props = {}) => {
-  if (props?.glac_name && props.glac_name.trim() !== "") {
-    return props.glac_name.trim();
-  }
-  if (props?.GLAC_NAME && props.GLAC_NAME.trim() !== "") {
-    return props.GLAC_NAME.trim();
-  }
-  if (props?.glims_id && props.glims_id.trim() !== "") {
-    return `GLIMS ${props.glims_id.trim()}`;
-  }
+  if (props?.glac_name) return props.glac_name.trim();
+  if (props?.GLAC_NAME) return props.GLAC_NAME.trim();
   return "Ukjent";
 };
 
@@ -37,53 +35,60 @@ export function useGlacierLayer({ mapRef }) {
     const map = mapRef?.current;
     if (!map) return;
 
-    let clickPopup = null;
-    const isTouchDevice =
-      "ontouchstart" in window || navigator.maxTouchPoints > 0;
-
-    // -------------------------------------------------------
-    // UPDATED: addTileset now supports "noFill"
-    // -------------------------------------------------------
-    const addTileset = ({ url, sourceId, sourceLayer, fillId, noFill }) => {
-      if (!map.getSource(sourceId)) {
-        map.addSource(sourceId, { type: "vector", url });
+    const addGlacierPolygons = () => {
+      if (!map.getSource(glacierTileset.sourceId)) {
+        map.addSource(glacierTileset.sourceId, {
+          type: "vector",
+          url: glacierTileset.url,
+        });
       }
 
-      if (!map.getLayer(fillId)) {
+      if (!map.getLayer(FILL_LAYER_ID_1)) {
         map.addLayer({
-          id: fillId,
+          id: FILL_LAYER_ID_1,
           type: "fill",
-          source: sourceId,
-          "source-layer": sourceLayer,
-          paint: noFill
-            ? {
-                "fill-opacity": 0,             // NO FILL FOR TILESET 2
-                "fill-outline-color": "#2ba0ff", // optional outline
-              }
-            : {
-                "fill-color": "#2ba0ff",
-                "fill-opacity": 0.8,
-                "fill-outline-color": "#2ba0ff",
-              },
+          source: glacierTileset.sourceId,
+          "source-layer": glacierTileset.sourceLayer,
+          paint: {
+            "fill-color": "#2ba0ff",
+            "fill-opacity": 0.8,
+            "fill-outline-color": "#2ba0ff",
+          },
         });
       }
     };
 
-    const onLoad = async () => {
-      // glacierTileset1 = normal fill
-      addTileset({ ...glacierTileset, fillId: FILL_LAYER_ID_1 });
+    const addRouteLineTileset = () => {
+      if (!map.getSource(glacierTileset2.sourceId)) {
+        map.addSource(glacierTileset2.sourceId, {
+          type: "vector",
+          url: glacierTileset2.url,
+        });
+      }
 
-      // glacierTileset2 = no fill
-      addTileset({
-        ...glacierTileset2,
-        fillId: FILL_LAYER_ID_2,
-        noFill: true, // <--- IMPORTANT
-      });
+      if (!map.getLayer(LINE_LAYER_ID_2)) {
+        map.addLayer({
+          id: LINE_LAYER_ID_2,
+          type: "line",
+          source: glacierTileset2.sourceId,
+          "source-layer": glacierTileset2.sourceLayer,
 
-      map.setLayoutProperty(FILL_LAYER_ID_1, "visibility", "visible");
-      map.setLayoutProperty(FILL_LAYER_ID_2, "visibility", "visible");
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
 
-      // Highlight layers
+          paint: {
+            "line-color": "#ff6600",
+            "line-width": 3.5,
+            "line-opacity": 1.0,
+          },
+        });
+      }
+    };
+
+    const addHighlightLayers = () => {
+      // glacier polygon highlight
       if (!map.getLayer(HIGHLIGHT_LAYER_ID)) {
         map.addLayer({
           id: HIGHLIGHT_LAYER_ID,
@@ -96,159 +101,68 @@ export function useGlacierLayer({ mapRef }) {
           },
           filter: ["==", "glims_id", ""],
         });
+      }
 
+      // route line highlight
+      if (!map.getLayer(HIGHLIGHT_LAYER_ID_2)) {
         map.addLayer({
           id: HIGHLIGHT_LAYER_ID_2,
-          type: "fill",
+          type: "line",
           source: glacierTileset2.sourceId,
           "source-layer": glacierTileset2.sourceLayer,
+
           paint: {
-            "fill-color": "#004d80",
-            "fill-opacity": 0.7,
+            "line-color": "#004d80",
+            "line-width": 6,
+            "line-opacity": 0.9,
           },
-          filter: ["==", "glims_id", ""],
+
+          // NOTE: update this if your tileset route property differs
+          filter: ["==", "id", ""],
         });
       }
+    };
 
-      // Hover popups (non-touch devices)
-      if (!isTouchDevice) {
-        const hoverPopup = new mapboxgl.Popup({
-          closeButton: false,
-          closeOnClick: false,
-          offset: 10,
-          className: "glacier-popup",
+    const onLoad = () => {
+      addGlacierPolygons();
+      addRouteLineTileset();
+      addHighlightLayers();
+
+      map.setLayoutProperty(FILL_LAYER_ID_1, "visibility", "visible");
+      map.setLayoutProperty(LINE_LAYER_ID_2, "visibility", "visible");
+
+      // simple hover highlight
+      map.on("mousemove", (e) => {
+        const features = map.queryRenderedFeatures(e.point, {
+          layers: [FILL_LAYER_ID_1, LINE_LAYER_ID_2],
         });
 
-        map.on("mousemove", (e) => {
-          const features = map.queryRenderedFeatures(e.point, {
-            layers: [FILL_LAYER_ID_1, FILL_LAYER_ID_2],
-          });
-
-          if (!features.length) {
-            map.setFilter(HIGHLIGHT_LAYER_ID, ["==", "glims_id", ""]);
-            map.setFilter(HIGHLIGHT_LAYER_ID_2, ["==", "glims_id", ""]);
-            hoverPopup.remove();
-            return;
-          }
-
-          const feature = features[0];
-          const props = feature.properties;
-
-          if (props?.glims_id) {
-            map.setFilter(HIGHLIGHT_LAYER_ID, ["==", "glims_id", props.glims_id]);
-            map.setFilter(
-              HIGHLIGHT_LAYER_ID_2,
-              ["==", "glims_id", props.glims_id]
-            );
-          }
-
-          const glacLabel = getGlacierLabel(props);
-          const area =
-            props?.area_km2 && !isNaN(props.area_km2)
-              ? parseFloat(props.area_km2).toFixed(2)
-              : "N/A";
-          const slope =
-            props?.slope_deg && !isNaN(props.slope_deg)
-              ? parseFloat(props.slope_deg).toFixed(1)
-              : "N/A";
-          const zmax =
-            props?.zmax_m && !isNaN(props.zmax_m)
-              ? `${parseInt(props.zmax_m, 10)} m`
-              : "N/A";
-
-          const popupHTML = `
-            <div class="glacier-label">
-              <h4>${glacLabel !== "Ukjent" ? glacLabel : "Ukjent isbre"}</h4>
-              <div class="stats">
-                <div><strong>${area}</strong> km²</div>
-                <div><strong>${slope}°</strong> slope</div>
-                <div><strong>${zmax}</strong> max elev</div>
-              </div>
-            </div>
-          `;
-
-          hoverPopup.setLngLat(e.lngLat).setHTML(popupHTML).addTo(map);
-        });
-
-        map.on("mouseleave", FILL_LAYER_ID_1, () => {
+        if (!features.length) {
           map.setFilter(HIGHLIGHT_LAYER_ID, ["==", "glims_id", ""]);
-          hoverPopup.remove();
-        });
-        map.on("mouseleave", FILL_LAYER_ID_2, () => {
-          map.setFilter(HIGHLIGHT_LAYER_ID_2, ["==", "glims_id", ""]);
-          hoverPopup.remove();
-        });
-      }
-
-      // Click popup
-      map.on("click", [FILL_LAYER_ID_1, FILL_LAYER_ID_2], async (e) => {
-        const features = map.queryRenderedFeatures(e.point, {
-          layers: [FILL_LAYER_ID_1, FILL_LAYER_ID_2],
-        });
-        if (!features.length) return;
-
-        const feature = features[0];
-        const props = feature.properties;
-        const glacLabel = getGlacierLabel(props);
-        const area =
-          props?.area_km2 && !isNaN(props.area_km2)
-            ? parseFloat(props.area_km2).toFixed(2)
-            : "N/A";
-        const slope =
-          props?.slope_deg && !isNaN(props.slope_deg)
-            ? parseFloat(props.slope_deg).toFixed(1)
-            : "N/A";
-        const zmax =
-          props?.zmax_m && !isNaN(props.zmax_m)
-            ? `${parseInt(props.zmax_m, 10)} m`
-            : "N/A";
-
-        if (clickPopup) {
-          clickPopup.remove();
-          clickPopup = null;
+          map.setFilter(HIGHLIGHT_LAYER_ID_2, ["==", "id", ""]);
+          return;
         }
 
-        clickPopup = new mapboxgl.Popup({
-          className: "glacier-popup glacier-click-popup",
-          closeButton: true,
-          closeOnClick: false,
-          anchor: "top",
-          offset: [0, -10],
-        })
-          .setLngLat(e.lngLat)
-          .setHTML(`
-            <div class="glacier-label">
-              <h4>${glacLabel !== "Ukjent" ? glacLabel : "Ukjent isbre"}</h4>
-              <div class="stats">
-                <div><strong>${area}</strong> km²</div>
-                <div><strong>${slope}°</strong> slope</div>
-                <div><strong>${zmax}</strong> max elev</div>
-              </div>
-            </div>
-          `)
-          .addTo(map);
+        const f = features[0];
+        const props = f.properties;
+
+        if (props?.glims_id) {
+          map.setFilter(HIGHLIGHT_LAYER_ID, ["==", "glims_id", props.glims_id]);
+        }
+
+        if (props?.id) {
+          map.setFilter(HIGHLIGHT_LAYER_ID_2, ["==", "id", props.id]);
+        }
       });
 
-      map.on("click", (e) => {
-        const features = map.queryRenderedFeatures(e.point, {
-          layers: [FILL_LAYER_ID_1, FILL_LAYER_ID_2],
-        });
-
-        if (!features.length && clickPopup) {
-          clickPopup.remove();
-          clickPopup = null;
-        }
+      map.on("mouseleave", LINE_LAYER_ID_2, () => {
+        map.setFilter(HIGHLIGHT_LAYER_ID_2, ["==", "id", ""]);
       });
     };
 
-    if (map.isStyleLoaded()) {
-      onLoad();
-    } else {
-      map.on("load", onLoad);
-    }
+    if (map.isStyleLoaded()) onLoad();
+    else map.on("load", onLoad);
 
-    return () => {
-      map.off("load", onLoad);
-    };
+    return () => map.off("load", onLoad);
   }, [mapRef]);
 }
