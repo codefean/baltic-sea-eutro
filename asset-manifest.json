@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/static/css/main.9cac0909.css",
-    "main.js": "/static/js/main.d825270e.js",
-    "index.html": "/index.html",
-    "main.9cac0909.css.map": "/static/css/main.9cac0909.css.map",
-    "main.d825270e.js.map": "/static/js/main.d825270e.js.map"
+    "main.css": "/hydro-route/static/css/main.9cac0909.css",
+    "main.js": "/hydro-route/static/js/main.d825270e.js",
+    "index.html": "/hydro-route/index.html",
+    "main.9cac0909.css.map": "/hydro-route/static/css/main.9cac0909.css.map",
+    "main.d825270e.js.map": "/hydro-route/static/js/main.d825270e.js.map"
   },
   "entrypoints": [
     "static/css/main.9cac0909.css",
