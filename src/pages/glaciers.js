@@ -9,9 +9,9 @@ export const glacierTileset = {
 };
 
 export const glacierTileset2 = {
-  url: "mapbox://mapfean.38aaq5bo",
-  sourceLayer: "svallbard_glaciers2",
-  sourceId: "glaciers_svalbard",
+  url: "mapbox://mapfean.akvo3zma",
+  sourceLayer: "mapstogpx20251105_20-abjb2d",
+  sourceId: "mapstogpx20251105_20-abjb2d",
 };
 
 export const FILL_LAYER_ID_1 = "glacier-fill-scandi";
@@ -41,7 +41,10 @@ export function useGlacierLayer({ mapRef }) {
     const isTouchDevice =
       "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
-    const addTileset = ({ url, sourceId, sourceLayer, fillId }) => {
+    // -------------------------------------------------------
+    // UPDATED: addTileset now supports "noFill"
+    // -------------------------------------------------------
+    const addTileset = ({ url, sourceId, sourceLayer, fillId, noFill }) => {
       if (!map.getSource(sourceId)) {
         map.addSource(sourceId, { type: "vector", url });
       }
@@ -52,22 +55,35 @@ export function useGlacierLayer({ mapRef }) {
           type: "fill",
           source: sourceId,
           "source-layer": sourceLayer,
-          paint: {
-            "fill-color": "#2ba0ff",
-            "fill-opacity": 0.8,
-            "fill-outline-color": "#2ba0ff"
-          },
+          paint: noFill
+            ? {
+                "fill-opacity": 0,             // NO FILL FOR TILESET 2
+                "fill-outline-color": "#2ba0ff", // optional outline
+              }
+            : {
+                "fill-color": "#2ba0ff",
+                "fill-opacity": 0.8,
+                "fill-outline-color": "#2ba0ff",
+              },
         });
       }
     };
 
     const onLoad = async () => {
+      // glacierTileset1 = normal fill
       addTileset({ ...glacierTileset, fillId: FILL_LAYER_ID_1 });
-      addTileset({ ...glacierTileset2, fillId: FILL_LAYER_ID_2 });
+
+      // glacierTileset2 = no fill
+      addTileset({
+        ...glacierTileset2,
+        fillId: FILL_LAYER_ID_2,
+        noFill: true, // <--- IMPORTANT
+      });
 
       map.setLayoutProperty(FILL_LAYER_ID_1, "visibility", "visible");
       map.setLayoutProperty(FILL_LAYER_ID_2, "visibility", "visible");
 
+      // Highlight layers
       if (!map.getLayer(HIGHLIGHT_LAYER_ID)) {
         map.addLayer({
           id: HIGHLIGHT_LAYER_ID,
@@ -94,6 +110,7 @@ export function useGlacierLayer({ mapRef }) {
         });
       }
 
+      // Hover popups (non-touch devices)
       if (!isTouchDevice) {
         const hoverPopup = new mapboxgl.Popup({
           closeButton: false,
@@ -119,7 +136,10 @@ export function useGlacierLayer({ mapRef }) {
 
           if (props?.glims_id) {
             map.setFilter(HIGHLIGHT_LAYER_ID, ["==", "glims_id", props.glims_id]);
-            map.setFilter(HIGHLIGHT_LAYER_ID_2, ["==", "glims_id", props.glims_id]);
+            map.setFilter(
+              HIGHLIGHT_LAYER_ID_2,
+              ["==", "glims_id", props.glims_id]
+            );
           }
 
           const glacLabel = getGlacierLabel(props);
@@ -160,7 +180,7 @@ export function useGlacierLayer({ mapRef }) {
         });
       }
 
-      // 🔹 Handle click popups (simplified – no station info)
+      // Click popup
       map.on("click", [FILL_LAYER_ID_1, FILL_LAYER_ID_2], async (e) => {
         const features = map.queryRenderedFeatures(e.point, {
           layers: [FILL_LAYER_ID_1, FILL_LAYER_ID_2],
@@ -183,7 +203,6 @@ export function useGlacierLayer({ mapRef }) {
             ? `${parseInt(props.zmax_m, 10)} m`
             : "N/A";
 
-        // Remove existing click popup if open
         if (clickPopup) {
           clickPopup.remove();
           clickPopup = null;

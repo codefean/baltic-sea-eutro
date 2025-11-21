@@ -2,7 +2,7 @@
   "name": "hydro-route",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://www.norsklandslide.org",
+  "homepage": "https://codefean.github.io/hydro-route",
   "proxy": "http://localhost:5000",
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
