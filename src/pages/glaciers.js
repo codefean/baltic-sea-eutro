@@ -14,7 +14,6 @@ export const glacierTileset2 = {
   sourceId: "mapstogpx20251105_20-abjb2d",
 };
 
-// polygon glaciers
 export const FILL_LAYER_ID_1 = "glacier-fill-scandi";
 
 // GPX route stored as vector tiles

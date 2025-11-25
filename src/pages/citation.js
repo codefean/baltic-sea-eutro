@@ -4,11 +4,13 @@ import "./citation.css";
 const Citation = ({ stylePos }) => {
   return (
     <div className="citation-readout" style={stylePos}>
-      <div>
-        RGI Consortium (2023) — Randolph Glacier Inventory v7.0.{" "}
+      <div className="citation-entry">
+        HELCOM (2020). <em>Baltic Sea Eutrophication Assessment 2017–2021.</em> 
+        Baltic Sea Environment Proceedings No. 164.
       </div>
-            <div>
-        Website Created by Sean Fagan (2025){" "}
+
+      <div className="citation-entry">
+        Website created by Sean Fagan (2025)
       </div>
     </div>
   );

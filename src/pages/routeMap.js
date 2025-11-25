@@ -1,241 +1,179 @@
 import React, { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import * as turf from "@turf/turf";
 
-import { useGlacierLayer } from "./glaciers";
-import Loc from "./loc";
+import Legend from "./Legend";
+import Controls from "./Controls";
+import { eutroLayers } from "./eutroStyles";
 import Citation from "./citation";
-import "./routeMap.css";
-import PitchControl from "./PitchControl";
-import Hotkey from "./Hotkey";
 
-//cd /Users/seanfagan/Desktop/hydro-route
+
+// --------------------------------------------------
+// 1. Define the tileset exactly like your glacier example
+// --------------------------------------------------
+export const balticTileset = {
+  url: "mapbox://mapfean.6f77xsmu",
+  sourceLayer: "baltic_eut",
+  sourceId: "baltic_eut",             
+};
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoibWFwZmVhbiIsImEiOiJjbTNuOGVvN3cxMGxsMmpzNThzc2s3cTJzIn0.1uhX17BCYd65SeQsW1yibA";
 
-const RouteMap = () => {
-  const mapContainer = useRef(null);
+const BalticEutroMap = () => {
   const mapRef = useRef(null);
+  const mapContainer = useRef(null);
 
-  const DEFAULT_PITCH = 20;
-  const [pitch, setPitch] = useState(DEFAULT_PITCH);
-  const [, setLoading] = useState(true);
-  const [, setLogMessages] = useState([]);
-  const [, setProgress] = useState(0);
-  const [cursorInfo, setCursorInfo] = useState({
-    lat: null,
-    lng: null,
-    elevM: null,
+  const [selectedLayer, setSelectedLayer] = useState("ER");
+
+  const [statusFilters, setStatusFilters] = useState({
+    Good: true,
+    "Not Good": true,
+    "Not assessed": true,
   });
 
-  const updateProgress = (msg, step, totalSteps) => {
-    console.log(msg);
-    setLogMessages((prev) => [...prev, msg]);
-    setProgress(Math.round((step / totalSteps) * 100));
+  const [confFilters, setConfFilters] = useState({
+    Low: true,
+    Moderate: true,
+    High: true,
+  });
+
+  // --------------------------------------------------
+  // 2. Apply filters with correct Mapbox syntax
+  // --------------------------------------------------
+  const updateFilter = () => {
+    if (!mapRef.current) return;
+
+    const activeStatus = Object.keys(statusFilters).filter((k) => statusFilters[k]);
+    const activeConf = Object.keys(confFilters).filter((k) => confFilters[k]);
+
+    mapRef.current.setFilter("baltic-er-fill", [
+      "all",
+      ["in", ["get", "STATUS"], ...activeStatus],
+      ["in", ["get", "CONFIDENCE"], ...activeConf],
+    ]);
   };
 
-  const resetZoom = () => {
-    const map = mapRef.current;
-    if (!map) return;
-    map.flyTo({
-      center: [-123.908925, 43.554822],
-      zoom: 3.8,
-      speed: 2.2,
-      pitch: DEFAULT_PITCH,
+  useEffect(updateFilter, [statusFilters, confFilters]);
+
+  // --------------------------------------------------
+  // 3. Update color ramp when switching layers
+  // --------------------------------------------------
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    const style = eutroLayers[selectedLayer];
+
+    if (mapRef.current.getLayer("baltic-er-fill")) {
+      mapRef.current.setPaintProperty(
+        "baltic-er-fill",
+        "fill-color",
+        ["interpolate", ["linear"], ["get", style.field], ...style.stops.flat()]
+      );
+    }
+  }, [selectedLayer]);
+
+  // --------------------------------------------------
+  // 4. Initialize the map + add source/layers
+  // --------------------------------------------------
+  useEffect(() => {
+    mapRef.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: "mapbox://styles/mapbox/light-v11",
+      center: [20, 59],
+      zoom: 4.3,
     });
-    setPitch(DEFAULT_PITCH);
-  };
 
-  const cinematicFlyRoute = () => {
-    const map = mapRef.current;
-    if (!map) return;
-
-    const keyPoints = [
-      [-123.91, 43.55],
-      [-123.82, 43.72],
-      [-123.70, 43.95],
-      [-123.58, 44.20],
-      [-123.45, 44.45],
-      [-123.30, 44.70],
-      [-123.10, 45.00],
-      [-122.90, 45.30],
-      [-122.75, 45.55],
-      [-122.60, 45.80],
-    ];
-
-    let frame = 0;
-    const FRAME_TIME = 40;
-
-    const animate = () => {
-      if (frame >= keyPoints.length - 1) return;
-
-      const [lng, lat] = keyPoints[frame];
-      const [nextLng, nextLat] = keyPoints[frame + 1];
-
-      const bearing = turf.bearing(
-        turf.point([lng, lat]),
-        turf.point([nextLng, nextLat])
-      );
-
-      map.easeTo({
-        center: [lng, lat],
-        zoom: 9,
-        pitch: 70,
-        bearing: bearing,
-        duration: FRAME_TIME,
-        easing: (n) => n,
-        essential: true,
-      });
-
-      frame++;
-      setTimeout(() => requestAnimationFrame(animate), FRAME_TIME);
-    };
-
-    animate();
-  };
-
-  useEffect(() => {
-    const handleKeydown = (e) => {
-      if (e.key.toLowerCase() === "r") resetZoom();
-    };
-    window.addEventListener("keydown", handleKeydown);
-    return () => window.removeEventListener("keydown", handleKeydown);
-  }, []);
-
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-
-    const sync = () => setPitch(map.getPitch());
-    map.on("pitch", sync);
-    map.on("pitchend", sync);
-
-    return () => {
-      map.off("pitch", sync);
-      map.off("pitchend", sync);
-    };
-  }, []);
-
-  useEffect(() => {
-    const initMap = async () => {
-      if (mapRef.current) return;
-
-      const totalSteps = 6;
-      let step = 1;
-
-      updateProgress("Initializing Mapbox map...", step++, totalSteps);
-
-      mapRef.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: "mapbox://styles/mapbox/satellite-streets-v12",
-        center: [-123.908925, 43.554822],
-        zoom: 3.8,
-        pitch: DEFAULT_PITCH,
-      });
-
-      await new Promise((resolve) => mapRef.current.on("load", resolve));
-      updateProgress("Mapbox map loaded", step++, totalSteps);
-
-      if (!mapRef.current.getSource("mapbox-dem")) {
-        mapRef.current.addSource("mapbox-dem", {
-          type: "raster-dem",
-          url: "mapbox://mapbox.mapbox-terrain-dem-v1",
-          tileSize: 512,
-          maxzoom: 14,
+    mapRef.current.on("load", () => {
+      // --- Add source (following your glacierTileset pattern) ---
+      if (!mapRef.current.getSource(balticTileset.sourceId)) {
+        mapRef.current.addSource(balticTileset.sourceId, {
+          type: "vector",
+          url: balticTileset.url,
         });
-        mapRef.current.setTerrain({ source: "mapbox-dem", exaggeration: 1.0 });
       }
 
-      mapRef.current.on("mousemove", (e) => {
-        const { lng, lat } = e.lngLat;
-        const elevation = mapRef.current.queryTerrainElevation(e.lngLat, {
-          exaggerated: false,
-        });
-        setCursorInfo({
-          lat,
-          lng,
-          elevM: elevation !== null ? elevation.toFixed(1) : "N/A",
-        });
-      });
+      const style = eutroLayers[selectedLayer];
 
-      mapRef.current.on("mouseleave", () =>
-        setCursorInfo({ lat: null, lng: null, elevM: null })
-      );
-
-      updateProgress("Loading bike route...", step++, totalSteps);
-
-      try {
-        // ⭐ UPDATED FOR GITHUB PAGES ⭐
-        const routeData = await fetch(`${process.env.PUBLIC_URL}/route.geojson`)
-          .then((r) => r.json());
-
-        mapRef.current.addSource("bike-route", {
-          type: "geojson",
-          data: routeData,
-        });
-
+      // --- Add Fill Layer ---
+      if (!mapRef.current.getLayer("baltic-er-fill")) {
         mapRef.current.addLayer({
-          id: "bike-route-line",
-          type: "line",
-          source: "bike-route",
-          layout: {
-            "line-join": "round",
-            "line-cap": "round",
-          },
+          id: "baltic-er-fill",
+          type: "fill",
+          source: balticTileset.sourceId,
+          "source-layer": balticTileset.sourceLayer,
           paint: {
-            "line-color": "#FF6600",
-            "line-width": 4,
+            "fill-opacity": 0.85,
+            "fill-color": [
+              "interpolate",
+              ["linear"],
+              ["get", style.field],
+              ...style.stops.flat(),
+            ],
           },
         });
-
-        const bounds = new mapboxgl.LngLatBounds();
-        routeData.features.forEach((f) => {
-          if (f.geometry.type === "LineString") {
-            f.geometry.coordinates.forEach((c) => bounds.extend(c));
-          }
-        });
-
-        mapRef.current.fitBounds(bounds, {
-          padding: 50,
-          duration: 1500,
-        });
-
-        updateProgress("Route loaded", step++, totalSteps);
-      } catch (err) {
-        console.error("Error loading route.geojson", err);
-        updateProgress("Route load failed", step++, totalSteps);
       }
 
-      setLoading(false);
-    };
-
-    initMap();
-
-    return () => {
-      if (mapRef.current) {
-        mapRef.current.remove();
-        mapRef.current = null;
+      // --- Add Borders ---
+      if (!mapRef.current.getLayer("baltic-er-borders")) {
+        mapRef.current.addLayer({
+          id: "baltic-er-borders",
+          type: "line",
+          source: balticTileset.sourceId,
+          "source-layer": balticTileset.sourceLayer,
+          paint: {
+            "line-width": 0.3,
+            "line-color": "#444",
+          },
+        });
       }
-    };
+
+      // --- Popup ---
+      const popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+      });
+
+      mapRef.current.on("mousemove", "baltic-er-fill", (e) => {
+        const f = e.features[0];
+        mapRef.current.getCanvas().style.cursor = "pointer";
+
+        popup
+          .setLngLat(e.lngLat)
+          .setHTML(`
+            <strong>${f.properties.Name}</strong><br/>
+            ER: ${Number(f.properties.ER).toFixed(2)}<br/>
+            Status: ${f.properties.STATUS}<br/>
+            Confidence: ${f.properties.CONFIDENCE}
+          `)
+          .addTo(mapRef.current);
+      });
+
+      mapRef.current.on("mouseleave", "baltic-er-fill", () => {
+        mapRef.current.getCanvas().style.cursor = "";
+        popup.remove();
+      });
+
+      updateFilter();
+    });
   }, []);
-
-  useGlacierLayer({ mapRef });
 
   return (
     <div style={{ position: "relative" }}>
-      <div
-        ref={mapContainer}
-        style={{
-          width: "100%",
-          height: "calc(100vh - 43px)",
-          overflow: "hidden",
-          zIndex: 1,
-        }}
+      <div ref={mapContainer} style={{ width: "100%", height: "100vh" }} />
+
+      <Controls
+        selectedLayer={selectedLayer}
+        setSelectedLayer={setSelectedLayer}
+        statusFilters={statusFilters}
+        setStatusFilters={setStatusFilters}
+        confFilters={confFilters}
+        setConfFilters={setConfFilters}
       />
+<Citation />
+      <Legend layerStyle={eutroLayers[selectedLayer]} />
     </div>
   );
 };
 
-export default RouteMap;
+export default BalticEutroMap;
