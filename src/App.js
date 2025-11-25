@@ -37,8 +37,8 @@ const App = () => {
             {/* Default home route */}
             <Route path="/" element={<RouteMapPage />} />
             <Route path="/route-map" element={<RouteMapPage />} />
-            <Route path="/routeMap" element={<RouteMapPage />} />
-            <Route path="/about" element={<AboutPage />} />
+            <Route path="/Map" element={<RouteMapPage />} />
+            <Route path="/CDL" element={<AboutPage />} />
             <Route path="*" element={<RouteMapPage />} />
           </Routes>
         </main>

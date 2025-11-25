@@ -21,7 +21,7 @@ const Header = () => {
       {/* Nav links */}
       <nav className={`nav-links ${isMenuOpen ? "open" : ""}`}>
         <NavLink
-          to="/weatherMap"
+          to="/Map"
           className={({ isActive }) =>
             `nav-item ${isActive ? "active-link" : ""}`
           }
@@ -30,7 +30,7 @@ const Header = () => {
           Map
         </NavLink>
         <NavLink
-          to="/About"
+          to="/CDL"
           className={({ isActive }) =>
             `nav-item ${isActive ? "active-link" : ""}`
           }
