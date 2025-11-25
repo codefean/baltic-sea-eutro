@@ -17,11 +17,7 @@ const Legend = ({ layerStyle }) => {
         </ul>
       </div>
 
-      {layerStyle.description && (
-        <div className="legend-description">
-          {layerStyle.description}
-        </div>
-      )}
+
     </div>
   );
 };

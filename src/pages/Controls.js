@@ -7,7 +7,8 @@ const Controls = ({
   statusFilters,
   setStatusFilters,
   confFilters,
-  setConfFilters
+  setConfFilters,
+  layerStyle
 }) => {
 
   const toggleStatus = (key) => {
@@ -20,11 +21,9 @@ const Controls = ({
 
   return (
     <div className="controls-panel">
-      <h3>Map Controls</h3>
+      <h3>Map Layers</h3>
 
-      {/* LAYER SWITCHER */}
       <div className="control-block">
-        <h4>Layer</h4>
         <select
           value={selectedLayer}
           onChange={(e) => setSelectedLayer(e.target.value)}
@@ -35,36 +34,11 @@ const Controls = ({
           <option value="C3_ER_">C3 ER (Direct Effects)</option>
         </select>
       </div>
-
-      {/* STATUS FILTER */}
-      <div className="control-block">
-        <h4>Status</h4>
-        {Object.keys(statusFilters).map((key) => (
-          <label key={key}>
-            <input
-              type="checkbox"
-              checked={statusFilters[key]}
-              onChange={() => toggleStatus(key)}
-            />
-            {key}
-          </label>
-        ))}
-      </div>
-
-      {/* CONFIDENCE FILTER */}
-      <div className="control-block">
-        <h4>Confidence</h4>
-        {Object.keys(confFilters).map((key) => (
-          <label key={key}>
-            <input
-              type="checkbox"
-              checked={confFilters[key]}
-              onChange={() => toggleConf(key)}
-            />
-            {key}
-          </label>
-        ))}
-      </div>
+            {layerStyle.description && (
+        <div className="legend-description">
+          {layerStyle.description}
+        </div>
+      )}
     </div>
   );
 };

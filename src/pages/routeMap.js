@@ -169,6 +169,7 @@ const BalticEutroMap = () => {
         setStatusFilters={setStatusFilters}
         confFilters={confFilters}
         setConfFilters={setConfFilters}
+        layerStyle={eutroLayers[selectedLayer]}
       />
 <Citation />
       <Legend layerStyle={eutroLayers[selectedLayer]} />

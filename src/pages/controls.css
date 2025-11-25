@@ -24,3 +24,18 @@
 select {
   width: 100%;
 }
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 18px;
+  text-align: center;
+}
+
+
+.legend-description {
+  font-size: 0.8rem;
+  padding-top: 5px;
+  color: #000000;
+  line-height: 1.3;
+}
