@@ -43,7 +43,7 @@ const Header = () => {
       {/* Title centered */}
 <div className="header-title">
   <h1>
-    Basltic Sea Dead Zone CDL <span className="beta-text">| Beta</span>
+    Baltic Sea Eutrophication Indicators <span className="beta-text">| HELCOM HEAT 3.0 </span>
   </h1>
 </div>
     </header>
