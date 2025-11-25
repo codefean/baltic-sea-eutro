@@ -36,7 +36,7 @@ const Header = () => {
           }
           onClick={closeMenu}
         >
-          About
+          CDL
         </NavLink>
       </nav>
 

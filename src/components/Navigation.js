@@ -28,7 +28,7 @@ const Navigation = () => {
             to="/About"
             className={({ isActive }) => (isActive ? "active-link" : "")}
           >
-            About
+            CDL
           </NavLink>
         </li>
       </ul>

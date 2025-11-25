@@ -103,7 +103,7 @@ const BalticEutroMap = () => {
           source: balticTileset.sourceId,
           "source-layer": balticTileset.sourceLayer,
           paint: {
-            "fill-opacity": 0.85,
+            "fill-opacity": 0.8,
             "fill-color": [
               "interpolate",
               ["linear"],
