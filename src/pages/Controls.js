@@ -50,35 +50,8 @@ const Controls = ({
       {/* ER-only filters: hidden for oxygen layer */}
       {!isOxygenLayer && (
         <>
-          {/* Status Filters */}
-          <div className="control-block">
-            <h4>Status Filter</h4>
-            {Object.keys(statusFilters).map((key) => (
-              <label key={key} className="checkbox-row">
-                <input
-                  type="checkbox"
-                  checked={statusFilters[key]}
-                  onChange={() => toggleStatus(key)}
-                />
-                {key}
-              </label>
-            ))}
-          </div>
 
-          {/* Confidence Filters */}
-          <div className="control-block">
-            <h4>Confidence Filter</h4>
-            {Object.keys(confFilters).map((key) => (
-              <label key={key} className="checkbox-row">
-                <input
-                  type="checkbox"
-                  checked={confFilters[key]}
-                  onChange={() => toggleConf(key)}
-                />
-                {key}
-              </label>
-            ))}
-          </div>
+
         </>
       )}
 

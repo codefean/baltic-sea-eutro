@@ -32,7 +32,7 @@ export const eutroLayers = {
 
   C2_ER: {
     field: "C2_ER",
-    label: "Criteria 2 ER (Water clarity / Chl-a)",
+    label: "Criteria 2 ER (Water clarity)",
     description:
       "Direct biological effects linked to eutrophication, such as increased chlorophyll-a and reduced water clarity.",
     stops: [
