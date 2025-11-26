@@ -7,14 +7,28 @@ import Controls from "./Controls";
 import { eutroLayers } from "./eutroStyles";
 import Citation from "./citation";
 
-
-// --------------------------------------------------
-// 1. Define the tileset exactly like your glacier example
-// --------------------------------------------------
 export const balticTileset = {
   url: "mapbox://mapfean.6f77xsmu",
   sourceLayer: "baltic_eut",
-  sourceId: "baltic_eut",             
+  sourceId: "baltic_eut",
+};
+
+export const basinTileset = {
+  url: "mapbox://mapfean.7z87vos7",
+  sourceLayer: "basin_area3",
+  sourceId: "basin_area3",
+};
+
+export const riverTileset = {
+  url: "mapbox://mapfean.49mqpxxm",
+  sourceLayer: "basin_rivers",
+  sourceId: "basin_rivers",
+};
+
+export const deepOxygenTileset = {
+  url: "mapbox://mapfean.dh0trrov",
+  sourceLayer: "deep_o2",
+  sourceId: "deep_o2",
 };
 
 mapboxgl.accessToken =
@@ -23,120 +37,258 @@ mapboxgl.accessToken =
 const BalticEutroMap = () => {
   const mapRef = useRef(null);
   const mapContainer = useRef(null);
+  const initialized = useRef(false);
 
   const [selectedLayer, setSelectedLayer] = useState("ER");
-
   const [statusFilters, setStatusFilters] = useState({
     Good: true,
     "Not Good": true,
     "Not assessed": true,
   });
-
   const [confFilters, setConfFilters] = useState({
     Low: true,
     Moderate: true,
     High: true,
   });
 
-  // --------------------------------------------------
-  // 2. Apply filters with correct Mapbox syntax
-  // --------------------------------------------------
+  // ------------------------------------------------------------
+  // Build color expression (numeric vs categorical)
+  // ------------------------------------------------------------
+  const createColorExpression = (style) => {
+    const isCategorical = typeof style.stops[0][0] === "string";
+
+    if (isCategorical) {
+      // categorical: ["match", ["get", field], value1, color1, value2, color2, ..., defaultColor]
+      const matchList = [];
+      style.stops.forEach(([value, color]) => matchList.push(value, color));
+
+      return ["match", ["get", style.field], ...matchList, "#ccc"];
+    }
+
+    // numeric interpolate
+    const stops = style.stops.reduce((acc, s) => [...acc, s[0], s[1]], []);
+    return ["interpolate", ["linear"], ["get", style.field], ...stops];
+  };
+
+  // ------------------------------------------------------------
+  // Apply filtering (ER layers only)
+  // ------------------------------------------------------------
   const updateFilter = () => {
     if (!mapRef.current) return;
+
+    // Do not apply ER filters when showing oxygen layer
+    if (selectedLayer === "OXYGEN_DEBT") {
+      return;
+    }
 
     const activeStatus = Object.keys(statusFilters).filter((k) => statusFilters[k]);
     const activeConf = Object.keys(confFilters).filter((k) => confFilters[k]);
 
-    mapRef.current.setFilter("baltic-er-fill", [
-      "all",
-      ["in", ["get", "STATUS"], ...activeStatus],
-      ["in", ["get", "CONFIDENCE"], ...activeConf],
-    ]);
-  };
+    const filter = ["all"];
 
-  useEffect(updateFilter, [statusFilters, confFilters]);
+    if (activeStatus.length > 0) {
+      filter.push(["in", ["get", "STATUS"], ...activeStatus]);
+    }
 
-  // --------------------------------------------------
-  // 3. Update color ramp when switching layers
-  // --------------------------------------------------
-  useEffect(() => {
-    if (!mapRef.current) return;
-
-    const style = eutroLayers[selectedLayer];
+    if (activeConf.length > 0) {
+      filter.push(["in", ["get", "CONFIDENCE"], ...activeConf]);
+    }
 
     if (mapRef.current.getLayer("baltic-er-fill")) {
-      mapRef.current.setPaintProperty(
+      mapRef.current.setFilter("baltic-er-fill", filter);
+    }
+  };
+
+  useEffect(updateFilter, [statusFilters, confFilters, selectedLayer]);
+
+  // ------------------------------------------------------------
+  // Update visibility & colors when selectedLayer changes
+  // ------------------------------------------------------------
+  useEffect(() => {
+    if (!mapRef.current || !mapRef.current.isStyleLoaded()) return;
+
+    const map = mapRef.current;
+    const style = eutroLayers[selectedLayer];
+
+    const layers = [
+      "baltic-er-fill",
+      "baltic-er-borders",
+      "deep-o2-fill",
+      "deep-o2-outline",
+    ];
+
+    // hide all
+    layers.forEach((id) => {
+      if (map.getLayer(id)) {
+        map.setLayoutProperty(id, "visibility", "none");
+      }
+    });
+
+    if (selectedLayer === "OXYGEN_DEBT") {
+      // Show oxygen layer
+      if (map.getLayer("deep-o2-fill")) {
+        map.setLayoutProperty("deep-o2-fill", "visibility", "visible");
+        map.setPaintProperty(
+          "deep-o2-fill",
+          "fill-color",
+          createColorExpression(style)
+        );
+      }
+      if (map.getLayer("deep-o2-outline")) {
+        map.setLayoutProperty("deep-o2-outline", "visibility", "visible");
+      }
+      return;
+    }
+
+    // Show ER layers
+    if (map.getLayer("baltic-er-fill")) {
+      map.setLayoutProperty("baltic-er-fill", "visibility", "visible");
+      map.setPaintProperty(
         "baltic-er-fill",
         "fill-color",
-        ["interpolate", ["linear"], ["get", style.field], ...style.stops.flat()]
+        createColorExpression(style)
       );
+    }
+    if (map.getLayer("baltic-er-borders")) {
+      map.setLayoutProperty("baltic-er-borders", "visibility", "visible");
     }
   }, [selectedLayer]);
 
-  // --------------------------------------------------
-  // 4. Initialize the map + add source/layers
-  // --------------------------------------------------
+  // ------------------------------------------------------------
+  // Initialize Map (Strict Mode Safe)
+  // ------------------------------------------------------------
   useEffect(() => {
-    mapRef.current = new mapboxgl.Map({
+    if (initialized.current) return;
+    initialized.current = true;
+
+    const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/light-v11",
       center: [20, 59],
-      zoom: 4.3,
+      zoom: 4.1,
     });
 
-    mapRef.current.on("load", () => {
-      // --- Add source (following your glacierTileset pattern) ---
-      if (!mapRef.current.getSource(balticTileset.sourceId)) {
-        mapRef.current.addSource(balticTileset.sourceId, {
-          type: "vector",
-          url: balticTileset.url,
-        });
-      }
+    mapRef.current = map;
 
-      const style = eutroLayers[selectedLayer];
+    map.on("load", () => {
+      const initialStyle = eutroLayers[selectedLayer];
 
-      // --- Add Fill Layer ---
-      if (!mapRef.current.getLayer("baltic-er-fill")) {
-        mapRef.current.addLayer({
-          id: "baltic-er-fill",
-          type: "fill",
-          source: balticTileset.sourceId,
-          "source-layer": balticTileset.sourceLayer,
-          paint: {
-            "fill-opacity": 0.8,
-            "fill-color": [
-              "interpolate",
-              ["linear"],
-              ["get", style.field],
-              ...style.stops.flat(),
-            ],
-          },
-        });
-      }
+      // -----------------------------
+      // Baltic Sea polygon fill
+      // -----------------------------
+      map.addSource(balticTileset.sourceId, {
+        type: "vector",
+        url: balticTileset.url,
+      });
 
-      // --- Add Borders ---
-      if (!mapRef.current.getLayer("baltic-er-borders")) {
-        mapRef.current.addLayer({
-          id: "baltic-er-borders",
-          type: "line",
-          source: balticTileset.sourceId,
-          "source-layer": balticTileset.sourceLayer,
-          paint: {
-            "line-width": 0.3,
-            "line-color": "#444",
-          },
-        });
-      }
+      map.addLayer({
+        id: "baltic-er-fill",
+        type: "fill",
+        source: balticTileset.sourceId,
+        "source-layer": balticTileset.sourceLayer,
+        paint: {
+          "fill-opacity": 0.8,
+          "fill-color": createColorExpression(initialStyle),
+        },
+      });
 
-      // --- Popup ---
+      // Borders
+      map.addLayer({
+        id: "baltic-er-borders",
+        type: "line",
+        source: balticTileset.sourceId,
+        "source-layer": balticTileset.sourceLayer,
+        paint: {
+          "line-width": 1,
+          "line-color": "#444",
+        },
+      });
+
+      // -----------------------------
+      // Basin Outline
+      // -----------------------------
+      map.addSource(basinTileset.sourceId, {
+        type: "vector",
+        url: basinTileset.url,
+      });
+
+      map.addLayer({
+        id: "basin-area-outline",
+        type: "line",
+        source: basinTileset.sourceId,
+        "source-layer": basinTileset.sourceLayer,
+        paint: {
+          "line-color": "#222",
+          "line-width": 2.5,
+          "line-opacity": 0.6,
+        },
+      });
+
+      // -----------------------------
+      // Rivers
+      // -----------------------------
+      map.addSource(riverTileset.sourceId, {
+        type: "vector",
+        url: riverTileset.url,
+      });
+
+      map.addLayer({
+        id: "basin-rivers",
+        type: "line",
+        source: riverTileset.sourceId,
+        "source-layer": riverTileset.sourceLayer,
+        paint: {
+          "line-color": "#1f78b4",
+          "line-width": 1.4,
+          "line-opacity": 0.3,
+        },
+      });
+
+      // -----------------------------
+      // Deep Oxygen Layer
+      // -----------------------------
+      map.addSource(deepOxygenTileset.sourceId, {
+        type: "vector",
+        url: deepOxygenTileset.url,
+      });
+
+      map.addLayer({
+        id: "deep-o2-fill",
+        type: "fill",
+        source: deepOxygenTileset.sourceId,
+        "source-layer": deepOxygenTileset.sourceLayer,
+        paint: {
+          "fill-opacity": 0.75,
+          "fill-color": createColorExpression(eutroLayers.OXYGEN_DEBT),
+        },
+        layout: { visibility: "none" }, // start hidden
+      });
+
+      map.addLayer({
+        id: "deep-o2-outline",
+        type: "line",
+        source: deepOxygenTileset.sourceId,
+        "source-layer": deepOxygenTileset.sourceLayer,
+        paint: {
+          "line-color": "#333",
+          "line-width": 1,
+        },
+        layout: { visibility: "none" },
+      });
+
+      // -----------------------------
+      // Popup
+      // -----------------------------
       const popup = new mapboxgl.Popup({
         closeButton: false,
         closeOnClick: false,
       });
 
-      mapRef.current.on("mousemove", "baltic-er-fill", (e) => {
+      // ER popup
+      map.on("mousemove", "baltic-er-fill", (e) => {
         const f = e.features[0];
-        mapRef.current.getCanvas().style.cursor = "pointer";
+
+        map.getCanvas().style.cursor = "pointer";
 
         popup
           .setLngLat(e.lngLat)
@@ -146,16 +298,42 @@ const BalticEutroMap = () => {
             Status: ${f.properties.STATUS}<br/>
             Confidence: ${f.properties.CONFIDENCE}
           `)
-          .addTo(mapRef.current);
+          .addTo(map);
       });
 
-      mapRef.current.on("mouseleave", "baltic-er-fill", () => {
-        mapRef.current.getCanvas().style.cursor = "";
+      map.on("mouseleave", "baltic-er-fill", () => {
+        map.getCanvas().style.cursor = "";
         popup.remove();
       });
 
+      // Deep oxygen popup
+      map.on("mousemove", "deep-o2-fill", (e) => {
+        const f = e.features[0];
+
+        map.getCanvas().style.cursor = "pointer";
+
+        popup
+          .setLngLat(e.lngLat)
+          .setHTML(`
+            <strong>${f.properties.name || "Deep Region"}</strong><br/>
+            Status: ${f.properties.Status}
+          `)
+          .addTo(map);
+      });
+
+      map.on("mouseleave", "deep-o2-fill", () => {
+        map.getCanvas().style.cursor = "";
+        popup.remove();
+      });
+
+      // initial filter for ER
       updateFilter();
     });
+
+    // Cleanup on unmount
+    return () => {
+      if (mapRef.current) mapRef.current.remove();
+    };
   }, []);
 
   return (
@@ -171,7 +349,8 @@ const BalticEutroMap = () => {
         setConfFilters={setConfFilters}
         layerStyle={eutroLayers[selectedLayer]}
       />
-<Citation />
+
+      <Citation />
       <Legend layerStyle={eutroLayers[selectedLayer]} />
     </div>
   );

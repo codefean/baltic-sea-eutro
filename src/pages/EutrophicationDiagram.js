@@ -11,7 +11,6 @@ const StageBox = ({ title, subtitle, emphasis }) => (
 const EutrophicationDiagram = () => {
   return (
     <div className="cdl-container">
-      {/* Main vertical chain */}
       <div className="cdl-main-column">
         <StageBox
           title="Human Nutrients"

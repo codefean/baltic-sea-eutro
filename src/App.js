@@ -18,7 +18,7 @@ const useDocumentTitle = (title) => {
 
 // Page wrappers to handle title updates
 const RouteMapPage = () => {
-  useDocumentTitle("Route Map");
+  useDocumentTitle("Baltic Sea Eutrophication");
   return <RouteMap />;
 };
 
