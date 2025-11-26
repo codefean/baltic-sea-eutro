@@ -26,7 +26,7 @@ export const riverTileset = {
 };
 
 export const deepOxygenTileset = {
-  url: "mapbox://mapfean.dh0trrov",
+  url: "mapbox://mapfean.dwdrr06z",
   sourceLayer: "deep_o2",
   sourceId: "deep_o2",
 };

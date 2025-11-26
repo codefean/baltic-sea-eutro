@@ -24,19 +24,17 @@ const Controls = ({
           <option value="C2_ER">C2 ER (Water Clarity)</option>
           <option value="C3_ER_">C3 ER (Indirect Effects)</option>
 
-          {/* NEW LAYER */}
           <option value="OXYGEN_DEBT">Deep Water Oxygen Status</option>
         </select>
       </div>
 
-      {/* Description */}
       {layerStyle.description && (
         <div className="legend-description">
           {layerStyle.description}
         </div>
       )}
 
-      {/* ER-only filters: hidden for oxygen layer */}
+
       {!isOxygenLayer && (
         <>
 
