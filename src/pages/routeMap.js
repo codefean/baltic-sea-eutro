@@ -31,6 +31,12 @@ export const deepOxygenTileset = {
   sourceId: "deep_o2",
 };
 
+export const shallowOxygenTileset = {
+  url: "mapbox://mapfean.avdul0qc",
+  sourceLayer: "shallow_o2_3",
+  sourceId: "shallow_o2_3",
+};
+
 mapboxgl.accessToken =
   "pk.eyJ1IjoibWFwZmVhbiIsImEiOiJjbTNuOGVvN3cxMGxsMmpzNThzc2s3cTJzIn0.1uhX17BCYd65SeQsW1yibA";
 
@@ -110,12 +116,15 @@ const BalticEutroMap = () => {
     const map = mapRef.current;
     const style = eutroLayers[selectedLayer];
 
-    const layers = [
-      "baltic-er-fill",
-      "baltic-er-borders",
-      "deep-o2-fill",
-      "deep-o2-outline",
-    ];
+const layers = [
+  "baltic-er-fill",
+  "baltic-er-borders",
+  "deep-o2-fill",
+  "deep-o2-outline",
+  "shallow-o2-fill",
+  "shallow-o2-outline",
+];
+
 
     // hide all
     layers.forEach((id) => {
@@ -139,6 +148,22 @@ const BalticEutroMap = () => {
       }
       return;
     }
+
+    if (selectedLayer === "SHALLOW_OXYGEN") {
+  if (map.getLayer("shallow-o2-fill")) {
+    map.setLayoutProperty("shallow-o2-fill", "visibility", "visible");
+    map.setPaintProperty(
+      "shallow-o2-fill",
+      "fill-color",
+      createColorExpression(style)
+    );
+  }
+  if (map.getLayer("shallow-o2-outline")) {
+    map.setLayoutProperty("shallow-o2-outline", "visibility", "visible");
+  }
+  return;
+}
+
 
     // Show ER layers
     if (map.getLayer("baltic-er-fill")) {
@@ -277,6 +302,39 @@ const BalticEutroMap = () => {
       });
 
       // -----------------------------
+// Shallow Oxygen Layer
+// -----------------------------
+map.addSource(shallowOxygenTileset.sourceId, {
+  type: "vector",
+  url: shallowOxygenTileset.url,
+});
+
+map.addLayer({
+  id: "shallow-o2-fill",
+  type: "fill",
+  source: shallowOxygenTileset.sourceId,
+  "source-layer": shallowOxygenTileset.sourceLayer,
+  paint: {
+    "fill-opacity": 0.75,
+    "fill-color": createColorExpression(eutroLayers.SHALLOW_OXYGEN),
+  },
+  layout: { visibility: "none" },
+});
+
+map.addLayer({
+  id: "shallow-o2-outline",
+  type: "line",
+  source: shallowOxygenTileset.sourceId,
+  "source-layer": shallowOxygenTileset.sourceLayer,
+  paint: {
+    "line-color": "#333",
+    "line-width": 1,
+  },
+  layout: { visibility: "none" },
+});
+
+
+      // -----------------------------
       // Popup
       // -----------------------------
       const popup = new mapboxgl.Popup({
@@ -315,8 +373,10 @@ const BalticEutroMap = () => {
         popup
           .setLngLat(e.lngLat)
           .setHTML(`
-            <strong>${f.properties.name || "Deep Region"}</strong><br/>
-            Status: ${f.properties.Status}
+            <strong>${f.properties.name || "Oxygen Debt"}</strong><br/>
+            Name: ${f.properties.Name}
+            Status: ${f.properties.Status}<br/>
+            EQRS: ${Number(f.properties.EQRS).toFixed(2)}
           `)
           .addTo(map);
       });
@@ -325,6 +385,29 @@ const BalticEutroMap = () => {
         map.getCanvas().style.cursor = "";
         popup.remove();
       });
+
+      // Shallow oxygen popup
+map.on("mousemove", "shallow-o2-fill", (e) => {
+  const f = e.features[0];
+
+  map.getCanvas().style.cursor = "pointer";
+
+  popup
+    .setLngLat(e.lngLat)
+    .setHTML(`
+      <strong>${f.properties.name || "Shallow Oxygen"}</strong><br/>
+      Name: ${f.properties.Name}<br/>
+      Status: ${f.properties.Status}<br/>
+      EQRS: ${Number(f.properties.EQRS).toFixed(2)}
+    `)
+    .addTo(map);
+});
+
+map.on("mouseleave", "shallow-o2-fill", () => {
+  map.getCanvas().style.cursor = "";
+  popup.remove();
+});
+
 
       // initial filter for ER
       updateFilter();

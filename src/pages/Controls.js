@@ -23,8 +23,9 @@ const Controls = ({
           <option value="C1_ER">C1 ER (Nutrients)</option>
           <option value="C2_ER">C2 ER (Water Clarity)</option>
           <option value="C3_ER_">C3 ER (Indirect Effects)</option>
+          <option value="OXYGEN_DEBT">Oxygen Debt (Deep Water)</option>
+          <option value="SHALLOW_OXYGEN">Oxygen Debt (Shallow Water)</option>
 
-          <option value="OXYGEN_DEBT">Deep Water Oxygen Status</option>
         </select>
       </div>
 

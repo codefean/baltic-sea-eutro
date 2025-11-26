@@ -62,13 +62,24 @@ export const eutroLayers = {
 
     OXYGEN_DEBT: {
     field: "Status", 
-    label: "Deep Water Oxygen Status",
+    label: "Oxygen Debt (Deep Water)",
     description:
-      "Status of deep water oxygen conditions. Fail = oxygen debt is present; Achieve = criteria met; Not Assessed = insufficient data.",
+      "Status of deep water oxygen conditions. Fail = oxygen debt is present; Achieve = criteria met",
     stops: [
       ["Fail", "#d7191c"],
       ["Achieve", "#1a9641"],
       ["Not Assessed", "#aaaaaa"]
     ]
-  }
+  },
+    SHALLOW_OXYGEN: {
+    field: "Status", 
+    label: "Oxygen Debt (Shallow Water)",
+    description:
+      "Status of shallow water oxygen conditions. Fail = oxygen debt is present; Achieve = criteria met",
+    stops: [
+      ["Fail", "#d7191c"],
+      ["Achieve", "#1a9641"],
+      ["Not Assessed", "#aaaaaa"]
+    ]
+  },
 };
