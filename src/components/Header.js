@@ -30,13 +30,13 @@ const Header = () => {
           Map
         </NavLink>
         <NavLink
-          to="/CDL"
+          to="/CLD"
           className={({ isActive }) =>
             `nav-item ${isActive ? "active-link" : ""}`
           }
           onClick={closeMenu}
         >
-          CDL
+          CLD
         </NavLink>
       </nav>
 
