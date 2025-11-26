@@ -4,20 +4,9 @@ import "./controls.css";
 const Controls = ({
   selectedLayer,
   setSelectedLayer,
-  statusFilters,
-  setStatusFilters,
-  confFilters,
-  setConfFilters,
   layerStyle
 }) => {
 
-  const toggleStatus = (key) => {
-    setStatusFilters({ ...statusFilters, [key]: !statusFilters[key] });
-  };
-
-  const toggleConf = (key) => {
-    setConfFilters({ ...confFilters, [key]: !confFilters[key] });
-  };
 
   const isOxygenLayer = selectedLayer === "OXYGEN_DEBT";
 
