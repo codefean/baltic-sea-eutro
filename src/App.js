@@ -39,7 +39,7 @@ const Layout = () => {
   const location = useLocation();
 
   // Paths where footer should be hidden
-  const hideFooter = ["/", "/route-map", "/Map"].includes(location.pathname);
+  const hideFooter = ["/", "/route-map", "/Map", "/CLD"].includes(location.pathname);
 
   return (
     <div className="app-container">
