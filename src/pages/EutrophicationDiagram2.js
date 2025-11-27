@@ -20,18 +20,14 @@ export default function CausalLoopsPage() {
             <h2>R1 — Hypoxia Persistence Loop (Reinforcing)</h2>
 
             <p>
-              In the Baltic Sea, nutrient enrichment is primarily driven by riverine inputs from
-              agriculture, municipal wastewater, and atmospheric deposition from surrounding
-              countries. These nutrients fuel large phytoplankton blooms, especially in the
-              eutrophication-prone central basins.
+              In the Baltic Sea, nutrient enrichment is primarily driven by anthropogenic inputs from agriculture, municipal wastewater, and atmospheric deposition.
+              These nutrients can fuel large phytoplankton blooms that further impair water quality. 
             </p>
 
             <p>
-              When blooms decay, organic matter sinks into deep basins such as the Gotland and Bornholm
-              Basins, where limited water exchange leads to intense microbial respiration and oxygen
-              consumption. As bottom-water layer oxygen declines, phosphorus bound in sediments is released,
-              a well-documented phenomenon in the Baltic known as "internal loading." This reinforces
-              eutrophication by sustaining high productivity even when external nutrient inputs drop.
+              When blooms decay, algal biomass sinks to the sea floor, where limited water exchange leads to intense microbial respiration and oxygen consumption.
+              As benthic oxygen declines, phosphorus bound in sediments is released, in a process called "internal loading." This reinforces eutrophication by sustaining
+              high productivity even when external nutrient inputs drop.
             </p>
 
             <pre className="cld-ascii2">

@@ -8,6 +8,8 @@ import { eutroLayers } from "./eutroStyles";
 import Citation from "./citation";
 import CausalLoops from "./Causal_loops";
 
+// cd /Users/seanfagan/Desktop/baltic-sea-eutro
+
 export const balticTileset = {
   url: "mapbox://mapfean.6f77xsmu",
   sourceLayer: "baltic_eut",
