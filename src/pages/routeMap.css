@@ -6,14 +6,6 @@
   --shared-width: 300px;
 }
 
-* {
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-html, body {
-  overflow-x: hidden;
-}
 /* Base Styles */
 body {
   margin: 0;
@@ -30,7 +22,6 @@ code {
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
 }
 
 .search-bar-container {
@@ -45,7 +36,6 @@ html, body {
 
 .no-scroll {
   overflow: hidden !important;
-  height: 100%;
 }
 
 .mapboxgl-canvas {

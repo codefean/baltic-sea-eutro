@@ -1,6 +1,6 @@
 // src/App.js
 import React from "react";
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 
 import RouteMap from "./pages/routeMap";
 import About from "./pages/About";
@@ -16,9 +16,14 @@ const useDocumentTitle = (title) => {
   }, [title]);
 };
 
-// Page wrappers to handle title updates
 const RouteMapPage = () => {
   useDocumentTitle("Baltic Sea Eutrophication");
+
+  React.useEffect(() => {
+    document.body.classList.add("no-scroll");
+    return () => document.body.classList.remove("no-scroll");
+  }, []);
+
   return <RouteMap />;
 };
 
@@ -27,23 +32,38 @@ const AboutPage = () => {
   return <About />;
 };
 
+// -------------------------------------------
+// Layout component that can hide the footer
+// -------------------------------------------
+const Layout = () => {
+  const location = useLocation();
+
+  // Paths where footer should be hidden
+  const hideFooter = ["/", "/route-map", "/Map"].includes(location.pathname);
+
+  return (
+    <div className="app-container">
+      <Header />
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<RouteMapPage />} />
+          <Route path="/route-map" element={<RouteMapPage />} />
+          <Route path="/Map" element={<RouteMapPage />} />
+          <Route path="/CLD" element={<AboutPage />} />
+          <Route path="*" element={<RouteMapPage />} />
+        </Routes>
+      </main>
+
+      {/* Hide footer on map pages */}
+      {!hideFooter && <Footer />}
+    </div>
+  );
+};
+
 const App = () => {
   return (
     <Router>
-      <div className="app-container">
-        <Header />
-        <main className="main-content">
-          <Routes>
-            {/* Default home route */}
-            <Route path="/" element={<RouteMapPage />} />
-            <Route path="/route-map" element={<RouteMapPage />} />
-            <Route path="/Map" element={<RouteMapPage />} />
-            <Route path="/CLD" element={<AboutPage />} />
-            <Route path="*" element={<RouteMapPage />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <Layout />
     </Router>
   );
 };
