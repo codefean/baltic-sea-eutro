@@ -31,13 +31,15 @@ export default function CausalLoopsPage() {
             </p>
 
             <pre className="cld-ascii2">
-{String.raw`                     R1: Hypoxia Persistence (Reinforcing)
-        ┌───────────────────────────────────────────────────────────┐
-        │                                                           │
- Nutrient Loading (+) → Primary Production (+) → Organic Matter Deposition (+)
-        ↓                                                           ↑
- Sediment Nutrient Release (+) ← Hypoxia / Anoxia (–) ← Bottom O₂ (–) ← Microbial Respiration (+)
-        └───────────────────────────────────────────────────────────┘`}
+{String.raw`                   R1: Hypoxia Persistence (Reinforcing)
+      ┌─────────────────────────────────────────────────────────────────────┐
+      │                                                                     │
+Nutrient Loading     (+)→      Primary Production     (+)→     Organic Matter Deposition 
+      ↑(+)                                                                  │ 
+      │                                                                     ↓(+)
+Sediment Nutrient Release  ←(-) Hypoxia / Anoxia  ←(–) Bottom O₂  ←(-) Microbial Respiration
+      │                                                                     │
+      └─────────────────────────────────────────────────────────────────────┘`}
             </pre>
           </div>
         )}
@@ -60,12 +62,13 @@ export default function CausalLoopsPage() {
             </p>
 
             <pre className="cld-ascii2">
-{String.raw`                     R2: Stratification & Oxygen Isolation (Reinforcing)
+{String.raw`     R2: Stratification & Oxygen Isolation (Reinforcing)
         ┌───────────────────────────────────────────────────────────┐
-        ↓                                                           ↑
- Stratification Strength (–) → Vertical Mixing / O₂ Supply (+) → Bottom O₂ (–)
-        ↑                                                           ↓
- Organic Matter / Density Gradients (+) ← Hypoxia / Anoxia (+)
+        │                                                           │                                                          
+Stratification Strength  (–)→  Vertical Mixing / O₂ Supply  (+)→ Bottom O₂ 
+        ↑(+)                                                        ↓(–)
+Organic Matter / Density Gradients           ←(+)           Hypoxia / Anoxia
+        │                                                           │
         └───────────────────────────────────────────────────────────┘`}
             </pre>
           </div>
@@ -85,14 +88,12 @@ export default function CausalLoopsPage() {
 
             <pre className="cld-ascii2">
 {String.raw`                     R3: Benthic Collapse & Microbial Dominance (Reinforcing)
-        ┌────────────────────────────────────────────────────────────────────────┐
-        ↓                                                                        ↑
- Hypoxia / Anoxia (–) → Benthic Fauna & Bioturbation (–) → Sediment Nutrient Release (+)
-        ↓                                                                        ↑
- Microbial Pathway Dominance (+) ← Organic Matter Deposition (+) ← Primary Production (+)
-        ↓                                                                        ↑
- Microbial Respiration (– on Bottom O₂) → Bottom O₂ (–) → Hypoxia / Anoxia (+)
-        └────────────────────────────────────────────────────────────────────────┘`}
+        ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+ Hypoxia / Anoxia           (–) →            Benthic Fauna & Bioturbation        (–) →          Sediment Nutrient Release
+        ↑(+)                                                                                               │
+        │                                                                                                  ↓(+)
+ Bottom O₂  ←(–) Microbial Respiration ← Primary Production  ←(+) Organic Matter Deposition ←(+) Microbial Pathway Dominance
+        └──────────────────────────────────────────────────────────────────────────────────────────────────┘`}
             </pre>
           </div>
         )}
