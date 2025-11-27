@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/hydro-route/static/css/main.3aaf5835.css",
-    "main.js": "/hydro-route/static/js/main.ae8c3fbb.js",
-    "index.html": "/hydro-route/index.html",
-    "main.3aaf5835.css.map": "/hydro-route/static/css/main.3aaf5835.css.map",
-    "main.ae8c3fbb.js.map": "/hydro-route/static/js/main.ae8c3fbb.js.map"
+    "main.css": "/baltic-sea-eutro/static/css/main.3aaf5835.css",
+    "main.js": "/baltic-sea-eutro/static/js/main.ae8c3fbb.js",
+    "index.html": "/baltic-sea-eutro/index.html",
+    "main.3aaf5835.css.map": "/baltic-sea-eutro/static/css/main.3aaf5835.css.map",
+    "main.ae8c3fbb.js.map": "/baltic-sea-eutro/static/js/main.ae8c3fbb.js.map"
   },
   "entrypoints": [
     "static/css/main.3aaf5835.css",
