@@ -76,17 +76,11 @@ export default function CausalLoopsPage() {
             <h2>R3 — Benthic Collapse & Microbial Dominance (Reinforcing)</h2>
 
             <p>
-              In the Baltic’s deep basins, recurring hypoxia severely impacts benthic communities.
-              Key bioturbators such as amphipods, bivalves, and polychaetes disappear when oxygen
-              levels drop below thresholds that are regularly reached during stagnation periods.
+              In the Baltic’s deep basins, recurring hypoxia severely impacts benthic communities. Without stable oxygen, organisms such as amphipods, bivalves, and polychaetes can suffer. 
             </p>
 
             <p>
-              Without these fauna, sediment oxygenation declines and microbial processes dominate.
-              Reduced sediments release ammonium and phosphate, and in extreme cases produce hydrogen
-              sulfide, contributing to the "Black Sea-like" conditions periodically observed in
-              the Baltic. This microbial shift increases oxygen demand and reinforces recurring
-              hypoxia.
+              Without these key organisms, sediment oxygenation declines and microbial processes dominate. Reduced sediments release ammonium and phosphate, and in extreme cases produce hydrogen sulfide, contributing to the "Black Sea-like" conditions periodically observed in the Baltic. This microbial shift increases oxygen demand and reinforces recurring hypoxia.
             </p>
 
             <pre className="cld-ascii2">
@@ -108,16 +102,11 @@ export default function CausalLoopsPage() {
             <h2>B1 — Storm Mixing Balancing Loop</h2>
 
             <p>
-              In the Baltic Sea, major inflow events from the North Sea—typically triggered by strong
-              storm systems—can intermittently ventilate deep basins. These "Major Baltic Inflows"
-              (MBIs) push oxygen-rich saline water into the system, temporarily reducing hypoxia.
+              In the Baltic Sea, storm systems can trigger major inflow events from the North Sea. These "Major Baltic Inflows" (MBIs) push oxygen-rich saline water into the system, temporarily reducing hypoxia.
             </p>
 
             <p>
-              However, MBIs have become less frequent in recent decades, and when they do occur, their
-              mitigating effects are often short-lived. Thus, while storm-driven mixing and inflow
-              provide a balancing loop, they seldom fully counteract the strong reinforcing drivers of
-              hypoxia.
+              However, MBIs have become less frequent in recent decades, and when they do occur, their mitigating effects are often short-lived. Thus, While intermittent mixing and inflow provide a balancing loop, they seldom fully counteract the strong reinforcing drivers of hypoxia.
             </p>
 
             <pre className="cld-ascii2">
