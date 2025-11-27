@@ -29,7 +29,7 @@ export default function CausalLoopsPage() {
             <p>
               When blooms decay, organic matter sinks into deep basins such as the Gotland and Bornholm
               Basins, where limited water exchange leads to intense microbial respiration and oxygen
-              consumption. As bottom-water oxygen declines, phosphorus bound in sediments is released,
+              consumption. As bottom-water layer oxygen declines, phosphorus bound in sediments is released,
               a well-documented phenomenon in the Baltic known as "internal loading." This reinforces
               eutrophication by sustaining high productivity even when external nutrient inputs drop.
             </p>

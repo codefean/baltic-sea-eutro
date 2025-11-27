@@ -87,7 +87,7 @@ export default function CausalLoopsPage() {
             <p>
               With less mixing, oxygen-poor bottom waters cannot be replenished. As hypoxia intensifies,
               density gradients sharpen due to accumulating organic matter and altered salinity profiles (p. 2).
-              This strengthens stratification further, forming a classic reinforcing loop.
+              This strengthens stratification further, forming a classic positive feedback loop.
             </p>
 
 <pre className="cld-ascii">
@@ -158,14 +158,14 @@ export default function CausalLoopsPage() {
             <h2>B1 — Storm Mixing Balancing Loop</h2>
 
             <p>
-              Storm events can temporarily reverse hypoxia by breaking stratification and reoxygenating
+              Storm events can temporarily reverse hypoxia by breaking stratification and re-oxygenating
               bottom waters. The paper describes how hurricanes significantly reduced or eliminated
               hypoxia in the Gulf of Mexico by disrupting stratification (p. 4).
             </p>
 
             <p>
               Unlike the reinforcing loops, this is a **balancing feedback** that pushes the system toward
-              normoxia — but only intermittently.
+              normoxia, but only intermittently.
             </p>
 
 <pre className="cld-ascii">
