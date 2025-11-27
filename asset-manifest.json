@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/hydro-route/static/css/main.5dbc4abd.css",
+    "main.css": "/hydro-route/static/css/main.b47e52fe.css",
     "main.js": "/hydro-route/static/js/main.dd3fe81e.js",
     "index.html": "/hydro-route/index.html",
-    "main.5dbc4abd.css.map": "/hydro-route/static/css/main.5dbc4abd.css.map",
+    "main.b47e52fe.css.map": "/hydro-route/static/css/main.b47e52fe.css.map",
     "main.dd3fe81e.js.map": "/hydro-route/static/js/main.dd3fe81e.js.map"
   },
   "entrypoints": [
-    "static/css/main.5dbc4abd.css",
+    "static/css/main.b47e52fe.css",
     "static/js/main.dd3fe81e.js"
   ]
 }
