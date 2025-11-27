@@ -43,7 +43,6 @@
   background: #ffffff;
   cursor: pointer;
   font-size: 0.9rem;
-  transition: 0.2s;
   border-color: #002afb;
 }
 
@@ -55,7 +54,6 @@
   background: #1a73e8;
   border-color: #1a73e8;
   color: white;
-  font-weight: 600;
 }
 
 /* CONTENT AREA */
