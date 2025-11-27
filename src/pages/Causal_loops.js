@@ -1,5 +1,6 @@
 import React from "react";
 import "./causal_loops.css";
+import EutrophicationDiagram from "./EutrophicationDiagram2";
 
 const CausalLoops = ({
 
@@ -8,9 +9,8 @@ const CausalLoops = ({
 
   return (
     <div className="causal-panel">
-      <h3>Causal Loops</h3>
 
-
+<EutrophicationDiagram />
     </div>
   );
 };

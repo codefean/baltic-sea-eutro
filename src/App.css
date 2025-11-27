@@ -14,3 +14,14 @@ html, body {
 .main-content {
   flex: 1; /* Pushes the footer down when there's little content */
 }
+
+/* Prevent horizontal scrolling */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Optional: ensure main container doesn't exceed width */
+.app-container {
+  max-width: 100%;
+  overflow-x: hidden;
+}
