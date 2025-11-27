@@ -178,14 +178,14 @@ Organic Matter / Density Gradients           ←(+)           Hypoxia / Anoxia
             </p>
 
             <p>
-              Unlike the reinforcing loops, this is a **balancing feedback** that pushes the system toward
+              Unlike the reinforcing loops, this is a balancing feedback that pushes the system toward
               normoxia, but only intermittently.
             </p>
 
 <pre className="cld-ascii">
 {String.raw`
                      B1: Storm Mixing Balancing Loop
- Storm Mixing / Winds (+) → Vertical Mixing (+) → Bottom O₂ (+) → Hypoxia / Anoxia (–)
+ Storm Mixing / Winds (+)→ Vertical Mixing (+)→ Bottom O₂ (-)→ Hypoxia / Anoxia
 `}
 </pre>
 

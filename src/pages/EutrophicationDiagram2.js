@@ -112,7 +112,7 @@ Organic Matter / Density Gradients           ←(+)           Hypoxia / Anoxia
 
             <pre className="cld-ascii2">
 {String.raw`                     B1: Storm Mixing Balancing Loop
- Storm Mixing / Inflows (+) → Vertical Mixing (+) → Bottom O₂ (+) → Hypoxia / Anoxia (–)`}
+ Storm Mixing / Inflows (+)→ Vertical Mixing (+)→ Bottom O₂ (-)→ Hypoxia / Anoxia`}
             </pre>
           </div>
         )}
