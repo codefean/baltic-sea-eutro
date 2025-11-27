@@ -1,155 +1,70 @@
-.cdl-container {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 12px;
-  color: #1f2933;
-  max-width: 920px;
+/* PAGE LAYOUT */
+.cld-container {
+  max-width: 980px;
   margin: 0 auto;
-  padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.94);
-  border-radius: 10px;
-  margin-top: 40px;
+  padding: 20px;
+  font-family: "Inter", Arial, sans-serif;
+  line-height: 1.55;
 }
 
-.cdl-main-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.cdl-box {
-  min-width: 260px;
-  max-width: 360px;
+.cld-header {
   text-align: center;
-  border-radius: 8px;
-  padding: 8px 10px;
-  margin: 2px 0;
-  background: #f1f5f9;
-  border: 1px solid #cbd5e1;
+  margin-bottom: 25px;
 }
 
-.cdl-box--emphasis {
-  background: #fee2e2;
-  border-color: #f97373;
-  font-weight: 600;
+.cld-header h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
 }
 
-.cdl-box-title {
-  font-size: 12px;
-}
-
-.cdl-box-subtitle {
-  margin-top: 2px;
-  font-size: 10px;
-  color: #64748b;
-}
-
-.cdl-arrow {
-  font-size: 11px;
-  margin: 2px 0 4px;
-  color: #94a3b8;
-}
-
-/* Stratification side input */
-.cdl-stratification-row {
+/* TABS */
+.cld-tabs {
   display: flex;
-  align-items: center;
-  margin-top: 4px;
-  margin-bottom: 2px;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
-.cdl-stratification-box {
-  font-size: 11px;
-  padding: 4px 8px;
+.cld-tab {
+  padding: 10px 16px;
   border-radius: 6px;
-  background: #e0f2fe;
-  border: 1px solid #7dd3fc;
+  border: 1px solid #bfbfbf;
+  background: #f7f7f7;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: 0.2s;
 }
 
-.cdl-stratification-sub {
-  font-size: 10px;
-  color: #0369a1;
+.cld-tab:hover {
+  background: #ececec;
 }
 
-.cdl-stratification-arrow {
-  margin-left: 6px;
-  font-size: 11px;
-  color: #64748b;
+.cld-tab.active {
+  background: #1a73e8;
+  border-color: #1a73e8;
+  color: white;
+  font-weight: 600;
 }
 
-/* Impacts row */
-.cdl-impacts-section {
-  display: flex;
-  gap: 16px;
-  margin-top: 14px;
-}
-
-.cdl-impact-column {
-  flex: 1;
-  background: #f8fafc;
+/* CONTENT AREA */
+.cld-content {
+  background: white;
+  border: 1px solid #dcdcdc;
+  padding: 25px;
   border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  padding: 8px 10px;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.04);
 }
 
-.cdl-impact-title {
-  font-weight: 600;
-  font-size: 11px;
-  margin-bottom: 4px;
-  color: #0f172a;
-}
-
-.cdl-impact-column ul {
-  margin: 0;
-  padding-left: 16px;
-}
-
-.cdl-impact-column li {
-  font-size: 10px;
-  margin-bottom: 2px;
-}
-
-/* Feedback row */
-.cdl-feedback-row {
-  margin-top: 10px;
-  border-top: 1px dashed #cbd5e1;
-  padding-top: 6px;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-row-gap: 2px;
-  align-items: center;
-}
-
-.cdl-feedback-label {
-  font-size: 10px;
-  font-weight: 600;
-  color: #b91c1c;
-}
-
-.cdl-feedback-arrow {
-  font-size: 10px;
-  color: #b91c1c;
-  padding-left: 6px;
-}
-
-.cdl-feedback-note {
-  grid-column: 1 / -1;
-  font-size: 9px;
-  color: #64748b;
-  margin-top: 2px;
-}
-
-/* Responsive tweaks */
-@media (max-width: 640px) {
-  .cdl-container {
-    font-size: 11px;
-    padding: 10px;
-  }
-
-  .cdl-box {
-    min-width: 220px;
-  }
-
-  .cdl-impacts-section {
-    flex-direction: column;
-  }
+/* ASCII DIAGRAMS */
+.cld-ascii {
+  background: #f4f4f4;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  overflow-x: auto;
+  white-space: pre;
+  font-family: "JetBrains Mono", "Courier New", monospace;
+  font-size: 0.92rem;
+  margin-top: 20px;
 }

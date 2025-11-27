@@ -6,6 +6,7 @@ import Legend from "./Legend";
 import Controls from "./Controls";
 import { eutroLayers } from "./eutroStyles";
 import Citation from "./citation";
+import CausalLoops from "./Causal_loops";
 
 export const balticTileset = {
   url: "mapbox://mapfean.6f77xsmu",
@@ -435,6 +436,7 @@ map.on("mouseleave", "shallow-o2-fill", () => {
 
       <Citation />
       <Legend layerStyle={eutroLayers[selectedLayer]} />
+      <CausalLoops />
     </div>
   );
 };
