@@ -5,6 +5,7 @@ export default function CausalLoopsPage() {
   const [activeTab, setActiveTab] = useState(null);
 
   const tabs = [
+    { id: "SO", label: "How Dead Zones Develop" },
     { id: "R1", label: "R1: Hypoxia Persistence" },
     { id: "R2", label: "R2: Stratification Loop" },
     { id: "R3", label: "R3: Benthic Collapse" },
@@ -128,6 +129,52 @@ Organic Matter / Density Gradients           ←(+)           Hypoxia / Anoxia
   src={`${process.env.PUBLIC_URL}/CLD.png`}
   alt="Full Causal Loop Diagram"
 />
+  </div>
+)}
+
+        {/* ---------------- CLD ---------------- */}
+{activeTab === "SO" && (
+  <div>
+
+
+      <div>
+<div>
+  <h2>Overview — How Dead Zones Develop</h2>
+
+  <p>
+    Hypoxia is driven primarily by excess nutrient inputs from agriculture and atmospheric
+    deposition. These nutrients stimulate eutrophication, causing large algal blooms whose
+    decomposition increases organic matter reaching the seafloor. Microbial breakdown of this
+    material consumes dissolved oxygen, pushing bottom waters toward hypoxia. Physical factors
+    such as strong stratification or semi-enclosed basins further limit oxygen resupply,
+    accelerating oxygen loss.
+  </p>
+
+  <p>
+    As oxygen declines, benthic fauna die, bioturbation decreases, and sediments release nitrogen
+    and phosphorus rather than removing them. This internal loading reinforces eutrophication and
+    creates a positive feedback loop. Over time, systems move through stages from occasional
+    hypoxia, to seasonal events, and finally to persistent hypoxia and anoxia where hydrogen
+    sulfide forms. This shift fundamentally changes energy flow, diverting it from benthic animals
+    that support fisheries to microbial pathways dominated by decomposition.
+  </p>
+
+  <p>
+    Even when nutrient inputs decrease, recovery is slow. Reduced sediments, loss of key species,
+    and the need for full community succession create hysteresis: the ecosystem does not simply
+    reverse back along the same path. The result is a long-lasting, degraded state that requires
+    significant external forces or sustained nutrient reductions to recover.
+  </p>
+
+    <p>
+    The following tabs go into more depth regarding the specific feedback loops that drive this process.
+  </p>
+</div>
+
+
+  </div>
+
+
   </div>
 )}
 

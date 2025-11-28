@@ -5,11 +5,12 @@ export default function CausalLoopsPage() {
   const [activeTab, setActiveTab] = useState("R1");
 
   const tabs = [
+    { id: "SO", label: "How Dead Zones Develop" },
     { id: "R1", label: "R1: Hypoxia Persistence" },
     { id: "R2", label: "R2: Stratification Loop" },
     { id: "R3", label: "R3: Benthic Collapse" },
     { id: "B1", label: "B1: Storm Mixing" },
-    { id: "CLD", label: "CLD: Full Diagram" },
+    { id: "CLD", label: "CLD: Regime Shift" },
   ];
 
   return (
@@ -204,12 +205,110 @@ Organic Matter / Density Gradients           ←(+)           Hypoxia / Anoxia
         {/* ---------------- CLD ---------------- */}
 {activeTab === "CLD" && (
   <div>
-    <h2>Full Causal Loop Diagram</h2>
+
+
+      <div>
+    <h2>Regime Shift — Transition to a New Stable State</h2>
+
+    <p>
+      As the reinforcing loops R1, R2, and R3 intensify, the ecosystem is pushed closer to
+      critical thresholds. Each loop contributes to weakening the system's resilience:
+      internal nutrient recycling amplifies primary production, stratification isolates bottom
+      waters from oxygen resupply, and benthic collapse shifts energy flow toward microbial
+      pathways. These feedbacks collectively reduce the ecosystem's ability to recover from
+      disturbances.
+    </p>
+
+    <p>
+      Once enough thresholds are crossed severe and persistent hypoxia, sustained stratification,
+      and widespread loss of benthic fauna the system undergoes a regime shift. In this new
+      equilibrium, organic matter accumulates on the seafloor, microbial respiration dominates
+      oxygen consumption, and sediments release nutrients instead of storing them. Oxygen cannot
+      recover without strong external forces such as storms or artificial mixing, and the
+      low-oxygen state becomes self-sustaining. This transition marks a fundamental restructuring
+      of ecosystem function.
+    </p>
+  </div>
 
 <img
   src={`${process.env.PUBLIC_URL}/CLD.png`}
   alt="Full Causal Loop Diagram"
 />
+  </div>
+)}
+
+        {/* ---------------- CLD ---------------- */}
+{activeTab === "SO" && (
+  <div>
+
+
+      <div>
+<div>
+  <h2>Overview — How Dead Zones Develop</h2>
+
+  <p>
+    Hypoxia is driven primarily by excess nutrient inputs from agriculture and atmospheric
+    deposition. These nutrients stimulate eutrophication, causing large algal blooms whose
+    decomposition increases organic matter reaching the seafloor. Microbial breakdown of this
+    material consumes dissolved oxygen, pushing bottom waters toward hypoxia. Physical factors
+    such as strong stratification or semi-enclosed basins further limit oxygen resupply,
+    accelerating oxygen loss.
+  </p>
+
+  <p>
+    As oxygen declines, benthic fauna die, bioturbation decreases, and sediments release nitrogen
+    and phosphorus rather than removing them. This internal loading reinforces eutrophication and
+    creates a positive feedback loop. Over time, systems move through stages from occasional
+    hypoxia, to seasonal events, and finally to persistent hypoxia and anoxia where hydrogen
+    sulfide forms. This shift fundamentally changes energy flow, diverting it from benthic animals
+    that support fisheries to microbial pathways dominated by decomposition.
+  </p>
+
+  <p>
+    Even when nutrient inputs decrease, recovery is slow. Reduced sediments, loss of key species,
+    and the need for full community succession create hysteresis: the ecosystem does not simply
+    reverse back along the same path. The result is a long-lasting, degraded state that requires
+    significant external forces or sustained nutrient reductions to recover.
+  </p>
+
+    <p>
+    The following tabs go into more depth regarding the specific feedback loops that drive this process.
+  </p>
+</div>
+
+<pre className="cld-ascii">
+{String.raw`
+Nutrient loading (fertilizers, N deposition)
+                     | (+)
+                     v
+               Eutrophication
+                     | (+)
+                     v
+               Algal blooms
+                     | (+)
+                     v
+       Organic matter deposition
+                     | (+)
+                     v
+        Microbial respiration ↑
+                     | (+)
+                     v
+             Oxygen depletion
+                     | (+)
+                     v
+  Hypoxia (+)→ Benthic mortality   (+)→    ↑ Bioturbation
+                     |                             |
+                     | (+)                         | (–)
+                     |                             v
+                     |                          ↑ N, P recycling (positive feedback)
+                     └───────────────(+)───────────┘
+
+`}
+</pre>
+
+  </div>
+
+
   </div>
 )}
 
