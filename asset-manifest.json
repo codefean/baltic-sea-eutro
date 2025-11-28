@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/baltic-sea-eutro/static/css/main.16952a00.css",
-    "main.js": "/baltic-sea-eutro/static/js/main.9e157dc4.js",
+    "main.js": "/baltic-sea-eutro/static/js/main.667a1304.js",
     "index.html": "/baltic-sea-eutro/index.html",
     "main.16952a00.css.map": "/baltic-sea-eutro/static/css/main.16952a00.css.map",
-    "main.9e157dc4.js.map": "/baltic-sea-eutro/static/js/main.9e157dc4.js.map"
+    "main.667a1304.js.map": "/baltic-sea-eutro/static/js/main.667a1304.js.map"
   },
   "entrypoints": [
     "static/css/main.16952a00.css",
-    "static/js/main.9e157dc4.js"
+    "static/js/main.667a1304.js"
   ]
 }
