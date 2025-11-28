@@ -9,6 +9,7 @@ export default function CausalLoopsPage() {
     { id: "R2", label: "R2: Stratification Loop" },
     { id: "R3", label: "R3: Benthic Collapse" },
     { id: "B1", label: "B1: Storm Mixing" },
+    { id: "CLD", label: "CLD: Full Diagram" },
   ];
 
   return (
@@ -139,14 +140,13 @@ Organic Matter / Density Gradients           ←(+)           Hypoxia / Anoxia
 
 <pre className="cld-ascii">
 {String.raw`
-                     R3: Benthic Collapse & Microbial Dominance (Reinforcing)
-        ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
- Hypoxia / Anoxia           (–) →            Benthic Fauna & Bioturbation        (–) →          Sediment Nutrient Release
-        ↑(+)                                                                                               │
-        │                                                                                                  ↓(+)
- Bottom O₂  ←(–) Microbial Respiration ← Primary Production  ←(+) Organic Matter Deposition ←(+) Microbial Pathway Dominance
-        └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-
+                 R3: Benthic Collapse & Microbial Dominance (Reinforcing)
+    ┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+ Hypoxia / Anoxia    (–)→   Benthic Fauna & Bioturbation    (–)→   Sediment Nutrient Release    (+)→   Microbial Pathway Dominance
+    ↑(–)                                                                                                           │
+    │                                                                                                              ↓(+)
+ Bottom O₂    ←(–)       Microbial Respiration       ←(+)        Organic Matter Deposition      ←(+)        Primary Production
+    └──────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
 `}
 </pre>
@@ -157,11 +157,12 @@ Organic Matter / Density Gradients           ←(+)           Hypoxia / Anoxia
   <li><strong>Benthic Fauna & Bioturbation (–)→ Sediment Nutrient Release:</strong> Without bioturbating animals to oxygenate surface sediments, the seafloor becomes chemically reduced. This promotes the release of ammonium, phosphate, and reduced compounds such as hydrogen sulfide into the overlying water.</li>
   <li><strong>Sediment Nutrient Release (+)→ Microbial Pathway Dominance:</strong> Increased nutrient and reduced compound flux from sediments stimulates microbial activity. With benthic fauna gone, microbes take over most organic matter processing, concentrating energy flow in microbial pathways.</li>
   <li><strong>Microbial Pathway Dominance (+)→ Organic Matter Deposition:</strong> As microbial communities dominate and benthic fauna no longer rework sediment, organic matter accumulates at the sediment surface. Reduced pellet production and sediment mixing allow more organic material to settle and remain available for microbial degradation.</li>
-  <li><strong>Organic Matter Deposition (+)→ Primary Production:</strong> High organic matter deposition reflects high primary production in surface waters. Large phytoplankton blooms create substantial biomass that sinks to the seafloor, supplying fuel for microbial respiration.</li>
-  <li><strong>Primary Production (+)→ Microbial Respiration:</strong> Greater primary production generates more organic material for microbial decomposition. As microbes process this biomass, oxygen consumption increases in bottom waters and sediments.</li>
+  <li><strong>Primary Production (+)→ Organic Matter Deposition:</strong> High primary production in surface waters produces large amounts of biomass that sink to the seafloor, supplying organic material for microbial degradation.</li>
+  <li><strong>Organic Matter Deposition (+)→ Microbial Respiration:</strong> The accumulated organic matter provides fuel for microbial decomposition. As microbes process this biomass, oxygen consumption increases in bottom waters and sediments.</li>
   <li><strong>Microbial Respiration (– on Bottom O₂)→ Bottom O₂:</strong> Microbial oxidation of organic matter consumes oxygen. In stratified or poorly ventilated systems, this demand reduces bottom water oxygen concentrations.</li>
   <li><strong>Bottom O₂ (–)→ Hypoxia / Anoxia:</strong> As bottom oxygen continues to fall, low oxygen hypoxic or zero oxygen anoxic conditions intensify. This deepens oxygen depletion and reinforces the initial development of hypoxia, closing the loop.</li>
 </ul>
+
 
           </div>
         )}
@@ -196,7 +197,21 @@ Organic Matter / Density Gradients           ←(+)           Hypoxia / Anoxia
   <li><strong>Bottom O₂ (–)→ Hypoxia / Anoxia:</strong> As bottom oxygen concentrations rise, low oxygen hypoxic and zero oxygen anoxic zones shrink or disappear. Increased bottom oxygen therefore reduces the extent and severity of hypoxia and anoxia, acting as a balancing influence on the system.</li>
 </ul>
           </div>
+
+          
         )}
+
+        {/* ---------------- CLD ---------------- */}
+{activeTab === "CLD" && (
+  <div>
+    <h2>Full Causal Loop Diagram</h2>
+
+<img
+  src={`${process.env.PUBLIC_URL}/CLD.png`}
+  alt="Full Causal Loop Diagram"
+/>
+  </div>
+)}
 
       </section>
     </div>

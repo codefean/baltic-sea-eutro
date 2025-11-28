@@ -9,6 +9,7 @@ export default function CausalLoopsPage() {
     { id: "R2", label: "R2: Stratification Loop" },
     { id: "R3", label: "R3: Benthic Collapse" },
     { id: "B1", label: "B1: Storm Mixing" },
+    { id: "CLD", label: "CLD: Full Diagram" },
   ];
 
   return (
@@ -87,13 +88,14 @@ Organic Matter / Density Gradients           ←(+)           Hypoxia / Anoxia
             </p>
 
             <pre className="cld-ascii2">
-{String.raw`                     R3: Benthic Collapse & Microbial Dominance (Reinforcing)
-        ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
- Hypoxia / Anoxia           (–) →            Benthic Fauna & Bioturbation        (–) →          Sediment Nutrient Release
-        ↑(+)                                                                                               │
-        │                                                                                                  ↓(+)
- Bottom O₂  ←(–) Microbial Respiration ← Primary Production  ←(+) Organic Matter Deposition ←(+) Microbial Pathway Dominance
-        └──────────────────────────────────────────────────────────────────────────────────────────────────┘`}
+{String.raw`                 R3: Benthic Collapse & Microbial Dominance (Reinforcing)
+    ┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+ Hypoxia / Anoxia    (–)→   Benthic Fauna & Bioturbation    (–)→   Sediment Nutrient Release    (+)→   Microbial Pathway Dominance
+    ↑(–)                                                                                                           │
+    │                                                                                                              ↓(+)
+ Bottom O₂    ←(–)       Microbial Respiration       ←(+)        Organic Matter Deposition      ←(+)        Primary Production
+    └──────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+`}
             </pre>
           </div>
         )}
@@ -116,6 +118,18 @@ Organic Matter / Density Gradients           ←(+)           Hypoxia / Anoxia
             </pre>
           </div>
         )}
+
+                {/* ---------------- CLD ---------------- */}
+{activeTab === "CLD" && (
+  <div>
+    <h2>Full Causal Loop Diagram</h2>
+
+<img
+  src={`${process.env.PUBLIC_URL}/CLD.png`}
+  alt="Full Causal Loop Diagram"
+/>
+  </div>
+)}
 
       </section>
 
