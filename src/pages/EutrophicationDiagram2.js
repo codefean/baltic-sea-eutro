@@ -10,7 +10,7 @@ export default function CausalLoopsPage() {
     { id: "R2", label: "R2: Stratification Loop" },
     { id: "R3", label: "R3: Benthic Collapse" },
     { id: "B1", label: "B1: Storm Mixing" },
-    { id: "CLD", label: "CLD: Full Diagram" },
+    { id: "CLD", label: "CLD Diagram" },
   ];
 
   return (
