@@ -60,32 +60,27 @@ const BalticEutroMap = () => {
     High: true,
   });
 
-  // ------------------------------------------------------------
-  // Build color expression (numeric vs categorical)
-  // ------------------------------------------------------------
+
   const createColorExpression = (style) => {
     const isCategorical = typeof style.stops[0][0] === "string";
 
     if (isCategorical) {
-      // categorical: ["match", ["get", field], value1, color1, value2, color2, ..., defaultColor]
+
       const matchList = [];
       style.stops.forEach(([value, color]) => matchList.push(value, color));
 
       return ["match", ["get", style.field], ...matchList, "#ccc"];
     }
 
-    // numeric interpolate
+
     const stops = style.stops.reduce((acc, s) => [...acc, s[0], s[1]], []);
     return ["interpolate", ["linear"], ["get", style.field], ...stops];
   };
 
-  // ------------------------------------------------------------
-  // Apply filtering (ER layers only)
-  // ------------------------------------------------------------
   const updateFilter = () => {
     if (!mapRef.current) return;
 
-    // Do not apply ER filters when showing oxygen layer
+
     if (selectedLayer === "OXYGEN_DEBT") {
       return;
     }
@@ -110,9 +105,7 @@ const BalticEutroMap = () => {
 
   useEffect(updateFilter, [statusFilters, confFilters, selectedLayer]);
 
-  // ------------------------------------------------------------
-  // Update visibility & colors when selectedLayer changes
-  // ------------------------------------------------------------
+
   useEffect(() => {
     if (!mapRef.current || !mapRef.current.isStyleLoaded()) return;
 
@@ -129,7 +122,7 @@ const layers = [
 ];
 
 
-    // hide all
+
     layers.forEach((id) => {
       if (map.getLayer(id)) {
         map.setLayoutProperty(id, "visibility", "none");
@@ -137,7 +130,7 @@ const layers = [
     });
 
     if (selectedLayer === "OXYGEN_DEBT") {
-      // Show oxygen layer
+
       if (map.getLayer("deep-o2-fill")) {
         map.setLayoutProperty("deep-o2-fill", "visibility", "visible");
         map.setPaintProperty(
@@ -168,7 +161,7 @@ const layers = [
 }
 
 
-    // Show ER layers
+
     if (map.getLayer("baltic-er-fill")) {
       map.setLayoutProperty("baltic-er-fill", "visibility", "visible");
       map.setPaintProperty(
@@ -182,9 +175,7 @@ const layers = [
     }
   }, [selectedLayer]);
 
-  // ------------------------------------------------------------
-  // Initialize Map (Strict Mode Safe)
-  // ------------------------------------------------------------
+
   useEffect(() => {
     if (initialized.current) return;
     initialized.current = true;
@@ -201,9 +192,7 @@ const layers = [
     map.on("load", () => {
       const initialStyle = eutroLayers[selectedLayer];
 
-      // -----------------------------
-      // Baltic Sea polygon fill
-      // -----------------------------
+
       map.addSource(balticTileset.sourceId, {
         type: "vector",
         url: balticTileset.url,
@@ -220,7 +209,7 @@ const layers = [
         },
       });
 
-      // Borders
+
       map.addLayer({
         id: "baltic-er-borders",
         type: "line",
@@ -232,9 +221,7 @@ const layers = [
         },
       });
 
-      // -----------------------------
-      // Basin Outline
-      // -----------------------------
+
       map.addSource(basinTileset.sourceId, {
         type: "vector",
         url: basinTileset.url,
@@ -252,9 +239,7 @@ const layers = [
         },
       });
 
-      // -----------------------------
-      // Rivers
-      // -----------------------------
+
       map.addSource(riverTileset.sourceId, {
         type: "vector",
         url: riverTileset.url,
@@ -272,9 +257,7 @@ const layers = [
         },
       });
 
-      // -----------------------------
-      // Deep Oxygen Layer
-      // -----------------------------
+
       map.addSource(deepOxygenTileset.sourceId, {
         type: "vector",
         url: deepOxygenTileset.url,
@@ -289,7 +272,7 @@ const layers = [
           "fill-opacity": 0.75,
           "fill-color": createColorExpression(eutroLayers.OXYGEN_DEBT),
         },
-        layout: { visibility: "none" }, // start hidden
+        layout: { visibility: "none" }, 
       });
 
       map.addLayer({
@@ -304,9 +287,7 @@ const layers = [
         layout: { visibility: "none" },
       });
 
-      // -----------------------------
-// Shallow Oxygen Layer
-// -----------------------------
+
 map.addSource(shallowOxygenTileset.sourceId, {
   type: "vector",
   url: shallowOxygenTileset.url,
@@ -337,15 +318,13 @@ map.addLayer({
 });
 
 
-      // -----------------------------
-      // Popup
-      // -----------------------------
+
       const popup = new mapboxgl.Popup({
         closeButton: false,
         closeOnClick: false,
       });
 
-      // ER popup
+
       map.on("mousemove", "baltic-er-fill", (e) => {
         const f = e.features[0];
 
@@ -367,7 +346,6 @@ map.addLayer({
         popup.remove();
       });
 
-      // Deep oxygen popup
       map.on("mousemove", "deep-o2-fill", (e) => {
         const f = e.features[0];
 
@@ -389,7 +367,7 @@ map.addLayer({
         popup.remove();
       });
 
-      // Shallow oxygen popup
+
 map.on("mousemove", "shallow-o2-fill", (e) => {
   const f = e.features[0];
 
@@ -412,11 +390,10 @@ map.on("mouseleave", "shallow-o2-fill", () => {
 });
 
 
-      // initial filter for ER
       updateFilter();
     });
 
-    // Cleanup on unmount
+
     return () => {
       if (mapRef.current) mapRef.current.remove();
     };

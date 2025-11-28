@@ -1,4 +1,4 @@
-/* PAGE LAYOUT */
+
 .cld-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -23,7 +23,7 @@
   margin-top: -20px;
 }
 
-/* TABS */
+
 .cld-tabs {
   display: flex;
   gap: 8px;
@@ -51,7 +51,7 @@
   color: white;
 }
 
-/* CONTENT AREA */
+
 .cld-content {
   background: white;
   border: 1px solid #dcdcdc;
@@ -71,7 +71,7 @@ font-size: 1.2rem;
 margin-bottom: -5px;
 }
 
-/* ASCII DIAGRAMS */
+
 .cld-ascii {
   background: #f4f4f4;
   padding: 15px;

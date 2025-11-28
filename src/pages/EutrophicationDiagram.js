@@ -22,7 +22,7 @@ export default function CausalLoopsPage() {
         </p>
       </header>
 
-      {/* Top Tab Buttons */}
+
       <nav className="cld-tabs">
         {tabs.map((t) => (
           <button
@@ -202,7 +202,7 @@ Organic Matter / Density Gradients           ←(+)           Hypoxia / Anoxia
           
         )}
 
-        {/* ---------------- CLD ---------------- */}
+
 {activeTab === "CLD" && (
   <div>
 
@@ -237,7 +237,7 @@ Organic Matter / Density Gradients           ←(+)           Hypoxia / Anoxia
   </div>
 )}
 
-        {/* ---------------- CLD ---------------- */}
+
 {activeTab === "SO" && (
   <div>
 

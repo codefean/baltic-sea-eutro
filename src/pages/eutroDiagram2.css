@@ -1,4 +1,4 @@
-/* PAGE LAYOUT */
+
 .cld-container2 {
   width: 1040px;
   margin: 0 auto;
@@ -26,7 +26,7 @@
   margin-top: -20px;
 }
 
-/* TABS */
+
 .cld-tabs2 {
   display: flex;
   gap: 8px;
@@ -56,7 +56,7 @@
   color: white;
 }
 
-/* CONTENT AREA */
+
 .cld-content2 {
   background: rgba(255, 255, 255, 0.913);
   border: 1px solid #dcdcdc;
@@ -76,7 +76,7 @@ font-size: 1rem;
 margin-bottom: -5px;
 }
 
-/* ASCII DIAGRAMS */
+
 .cld-ascii2 {
   background: #fbfbfbb5;
   padding: 15px;
