@@ -123,11 +123,11 @@ Organic Matter / Density Gradients           ←(+)           Hypoxia / Anoxia
                 {/* ---------------- CLD ---------------- */}
 {activeTab === "CLD" && (
   <div>
-    <h2>Full Causal Loop Diagram</h2>
+    <h2>Causal Loop Diagram</h2>
 
 <img
   src={`${process.env.PUBLIC_URL}/CLD.png`}
-  alt="Full Causal Loop Diagram"
+  alt="Causal Loop Diagram"
 />
   </div>
 )}
