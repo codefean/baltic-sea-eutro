@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./eutroDiagram.css";
 
 export default function CausalLoopsPage() {
-  const [activeTab, setActiveTab] = useState("R1");
+  const [activeTab, setActiveTab] = useState("SO");
 
   const tabs = [
     { id: "SO", label: "How Dead Zones Develop" },
