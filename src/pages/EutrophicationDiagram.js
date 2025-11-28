@@ -231,7 +231,7 @@ Organic Matter / Density Gradients           ←(+)           Hypoxia / Anoxia
   </div>
 
 <img
-  src={`${process.env.PUBLIC_URL}/CLD.png`}
+  src={`${process.env.PUBLIC_URL}/CLD1.png`}
   alt="Causal Loop Diagram"
 />
   </div>
