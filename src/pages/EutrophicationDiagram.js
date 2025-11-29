@@ -210,24 +210,6 @@ Organic Matter / Density Gradients           ←(+)           Hypoxia / Anoxia
       <div>
     <h2>Regime Shift — Transition to a New Stable State</h2>
 
-    <p>
-      As the reinforcing loops R1, R2, and R3 intensify, the ecosystem is pushed closer to
-      critical thresholds. Each loop contributes to weakening the system's resilience:
-      internal nutrient recycling amplifies primary production, stratification isolates bottom
-      waters from oxygen resupply, and benthic collapse shifts energy flow toward microbial
-      pathways. These feedbacks collectively reduce the ecosystem's ability to recover from
-      disturbances.
-    </p>
-
-    <p>
-      Once enough thresholds are crossed severe and persistent hypoxia, sustained stratification,
-      and widespread loss of benthic fauna the system undergoes a regime shift. In this new
-      equilibrium, organic matter accumulates on the seafloor, microbial respiration dominates
-      oxygen consumption, and sediments release nutrients instead of storing them. Oxygen cannot
-      recover without strong external forces such as storms or artificial mixing, and the
-      low-oxygen state becomes self-sustaining. This transition marks a fundamental restructuring
-      of ecosystem function.
-    </p>
   </div>
 
 <img
